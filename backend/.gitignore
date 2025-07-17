@@ -1,0 +1,32 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Uploaded files (you can choose to keep if public-facing)
+uploads/
+
+# Build & cache
+dist/
+.cache/
+.next/
+out/
+
+# Editor-specific
+.vscode/
+.idea/
+
+# Dependency lock (optional if using yarn only)
+yarn.lock
