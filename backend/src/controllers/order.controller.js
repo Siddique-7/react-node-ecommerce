@@ -4,27 +4,32 @@ import Product from "../models/product.model.js";
 // Place a new order
 export const placeOrder = async (req, res) => {
   try {
+
+    // Order item
     const { orderItems } = req.body;
 
     console.log("📥 Received orderItems:", orderItems);
-
+    
+    // Item quantity checks
     if (!orderItems || orderItems.length === 0) {
       return res.status(400).json({ message: "No items in the cart" });
     }
+
 
     let totalAmount = 0;
 
     for (const item of orderItems) {
       console.log("🔍 Checking product ID:", item.product);
 
+      // Product availability
       const product = await Product.findById(item.product);
-
       if (!product) {
         console.log("❌ Product not found for ID:", item.product);
         return res.status(404).json({ message: "Product not found" });
       }
-
-      totalAmount += product.price * item.quantity;
+      
+      // Amount calculation
+      totalAmount += product.price * item.quantity;  
     }
 
     const order = await Order.create({
