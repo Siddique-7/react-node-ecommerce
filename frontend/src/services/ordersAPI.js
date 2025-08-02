@@ -1,6 +1,6 @@
 import api from './api';
 
-export const ordersAPI = {
+ const ordersAPI = {
   // Create new order
   createOrder: (orderData) => {
     return api.post('/orders', orderData);
@@ -51,3 +51,5 @@ export const ordersAPI = {
     return api.post('/orders/payment/verify', paymentData);
   }
 };
+
+export default ordersAPI

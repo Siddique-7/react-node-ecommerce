@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
-import { ordersAPI } from '../services/orders';
-import { FiCreditCard, FiUser, FiMapPin, FiLock } from 'react-icons/fi';
-import { toast } from 'react-toastify';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FiCreditCard, FiUser, FiMapPin, FiLock } from "react-icons/fi";
+import { toast } from "react-toastify";
+
+import useAuth from "../context/AuthContext";
+import useCart from "../context/CartContext";
+import ordersAPI from "../services/ordersAPI";
 
 const Checkout = () => {
   const { items, getCartTotal, clearCart } = useCart();
@@ -14,39 +15,39 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     // Shipping Address
-    fullName: user?.name || '',
-    email: user?.email || '',
-    phone: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: 'United States',
-    
+    fullName: user?.name || "",
+    email: user?.email || "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "United States",
+
     // Payment Info
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
-    cardHolderName: '',
-    
+    cardNumber: "",
+    expiryDate: "",
+    cvv: "",
+    cardHolderName: "",
+
     // Order Notes
-    notes: ''
+    notes: "",
   });
 
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
   };
@@ -56,39 +57,57 @@ const Checkout = () => {
 
     // Required fields
     const requiredFields = [
-      'fullName', 'email', 'phone', 'address', 'city', 'state', 'zipCode',
-      'cardNumber', 'expiryDate', 'cvv', 'cardHolderName'
+      "fullName",
+      "email",
+      "phone",
+      "address",
+      "city",
+      "state",
+      "zipCode",
+      "cardNumber",
+      "expiryDate",
+      "cvv",
+      "cardHolderName",
     ];
 
-    requiredFields.forEach(field => {
+    requiredFields.forEach((field) => {
       if (!formData[field].trim()) {
-        newErrors[field] = 'This field is required';
+        newErrors[field] = "This field is required";
       }
     });
 
     // Email validation
     if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
+      newErrors.email = "Please enter a valid email";
     }
 
     // Phone validation
-    if (formData.phone && !/^\d{10,}$/.test(formData.phone.replace(/\D/g, ''))) {
-      newErrors.phone = 'Please enter a valid phone number';
+    if (
+      formData.phone &&
+      !/^\d{10,}$/.test(formData.phone.replace(/\D/g, ""))
+    ) {
+      newErrors.phone = "Please enter a valid phone number";
     }
 
     // Card number validation (basic)
-    if (formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length < 16) {
-      newErrors.cardNumber = 'Please enter a valid card number';
+    if (
+      formData.cardNumber &&
+      formData.cardNumber.replace(/\s/g, "").length < 16
+    ) {
+      newErrors.cardNumber = "Please enter a valid card number";
     }
 
     // Expiry date validation
-    if (formData.expiryDate && !/^(0[1-9]|1[0-2])\/\d{2}$/.test(formData.expiryDate)) {
-      newErrors.expiryDate = 'Please enter expiry date in MM/YY format';
+    if (
+      formData.expiryDate &&
+      !/^(0[1-9]|1[0-2])\/\d{2}$/.test(formData.expiryDate)
+    ) {
+      newErrors.expiryDate = "Please enter expiry date in MM/YY format";
     }
 
     // CVV validation
     if (formData.cvv && (formData.cvv.length < 3 || formData.cvv.length > 4)) {
-      newErrors.cvv = 'Please enter a valid CVV';
+      newErrors.cvv = "Please enter a valid CVV";
     }
 
     setErrors(newErrors);
@@ -104,20 +123,20 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
-      toast.error('Please fill in all required fields');
+      toast.error("Please fill in all required fields");
       return;
     }
 
     try {
       setLoading(true);
-      
+
       const orderData = {
-        items: items.map(item => ({
+        items: items.map((item) => ({
           product: item._id,
           quantity: item.quantity,
-          price: item.price
+          price: item.price,
         })),
         shippingAddress: {
           fullName: formData.fullName,
@@ -126,29 +145,28 @@ const Checkout = () => {
           state: formData.state,
           zipCode: formData.zipCode,
           country: formData.country,
-          phone: formData.phone
+          phone: formData.phone,
         },
-        paymentMethod: 'card',
+        paymentMethod: "card",
         totalAmount: calculateTotal(),
-        notes: formData.notes
+        notes: formData.notes,
       };
 
       const response = await ordersAPI.createOrder(orderData);
-      
-      toast.success('Order placed successfully!');
+
+      toast.success("Order placed successfully!");
       clearCart();
       navigate(`/orders/${response.data.order._id}`);
-      
     } catch (error) {
-      console.error('Checkout error:', error);
-      toast.error(error.response?.data?.message || 'Failed to place order');
+      console.error("Checkout error:", error);
+      toast.error(error.response?.data?.message || "Failed to place order");
     } finally {
       setLoading(false);
     }
   };
 
   if (items.length === 0) {
-    navigate('/cart');
+    navigate("/cart");
     return null;
   }
 
@@ -179,11 +197,15 @@ const Checkout = () => {
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleChange}
-                    className={`input-field ${errors.fullName ? 'border-red-300' : ''}`}
+                    className={`input-field ${
+                      errors.fullName ? "border-red-300" : ""
+                    }`}
                     placeholder="Enter your full name"
                   />
                   {errors.fullName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.fullName}</p>
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.fullName}
+                    </p>
                   )}
                 </div>
 
@@ -196,7 +218,9 @@ const Checkout = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`input-field ${errors.email ? 'border-red-300' : ''}`}
+                    className={`input-field ${
+                      errors.email ? "border-red-300" : ""
+                    }`}
                     placeholder="Enter your email"
                   />
                   {errors.email && (
@@ -213,7 +237,9 @@ const Checkout = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className={`input-field ${errors.phone ? 'border-red-300' : ''}`}
+                    className={`input-field ${
+                      errors.phone ? "border-red-300" : ""
+                    }`}
                     placeholder="Enter your phone number"
                   />
                   {errors.phone && (
@@ -230,11 +256,15 @@ const Checkout = () => {
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
-                    className={`input-field ${errors.address ? 'border-red-300' : ''}`}
+                    className={`input-field ${
+                      errors.address ? "border-red-300" : ""
+                    }`}
                     placeholder="Enter your street address"
                   />
                   {errors.address && (
-                    <p className="mt-1 text-sm text-red-600">{errors.address}</p>
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.address}
+                    </p>
                   )}
                 </div>
 
@@ -247,7 +277,9 @@ const Checkout = () => {
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
-                    className={`input-field ${errors.city ? 'border-red-300' : ''}`}
+                    className={`input-field ${
+                      errors.city ? "border-red-300" : ""
+                    }`}
                     placeholder="Enter your city"
                   />
                   {errors.city && (
@@ -264,7 +296,9 @@ const Checkout = () => {
                     name="state"
                     value={formData.state}
                     onChange={handleChange}
-                    className={`input-field ${errors.state ? 'border-red-300' : ''}`}
+                    className={`input-field ${
+                      errors.state ? "border-red-300" : ""
+                    }`}
                     placeholder="Enter your state"
                   />
                   {errors.state && (
@@ -281,11 +315,15 @@ const Checkout = () => {
                     name="zipCode"
                     value={formData.zipCode}
                     onChange={handleChange}
-                    className={`input-field ${errors.zipCode ? 'border-red-300' : ''}`}
+                    className={`input-field ${
+                      errors.zipCode ? "border-red-300" : ""
+                    }`}
                     placeholder="Enter ZIP code"
                   />
                   {errors.zipCode && (
-                    <p className="mt-1 text-sm text-red-600">{errors.zipCode}</p>
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.zipCode}
+                    </p>
                   )}
                 </div>
 
@@ -328,11 +366,15 @@ const Checkout = () => {
                     name="cardHolderName"
                     value={formData.cardHolderName}
                     onChange={handleChange}
-                    className={`input-field ${errors.cardHolderName ? 'border-red-300' : ''}`}
+                    className={`input-field ${
+                      errors.cardHolderName ? "border-red-300" : ""
+                    }`}
                     placeholder="Name on card"
                   />
                   {errors.cardHolderName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.cardHolderName}</p>
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.cardHolderName}
+                    </p>
                   )}
                 </div>
 
@@ -345,12 +387,16 @@ const Checkout = () => {
                     name="cardNumber"
                     value={formData.cardNumber}
                     onChange={handleChange}
-                    className={`input-field ${errors.cardNumber ? 'border-red-300' : ''}`}
+                    className={`input-field ${
+                      errors.cardNumber ? "border-red-300" : ""
+                    }`}
                     placeholder="1234 5678 9012 3456"
                     maxLength={19}
                   />
                   {errors.cardNumber && (
-                    <p className="mt-1 text-sm text-red-600">{errors.cardNumber}</p>
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.cardNumber}
+                    </p>
                   )}
                 </div>
 
@@ -363,12 +409,16 @@ const Checkout = () => {
                     name="expiryDate"
                     value={formData.expiryDate}
                     onChange={handleChange}
-                    className={`input-field ${errors.expiryDate ? 'border-red-300' : ''}`}
+                    className={`input-field ${
+                      errors.expiryDate ? "border-red-300" : ""
+                    }`}
                     placeholder="MM/YY"
                     maxLength={5}
                   />
                   {errors.expiryDate && (
-                    <p className="mt-1 text-sm text-red-600">{errors.expiryDate}</p>
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.expiryDate}
+                    </p>
                   )}
                 </div>
 
@@ -381,7 +431,9 @@ const Checkout = () => {
                     name="cvv"
                     value={formData.cvv}
                     onChange={handleChange}
-                    className={`input-field ${errors.cvv ? 'border-red-300' : ''}`}
+                    className={`input-field ${
+                      errors.cvv ? "border-red-300" : ""
+                    }`}
                     placeholder="123"
                     maxLength={4}
                   />
@@ -420,7 +472,7 @@ const Checkout = () => {
                 {items.map((item) => (
                   <div key={item._id} className="flex items-center space-x-3">
                     <img
-                      src={item.images?.[0] || '/placeholder-image.jpg'}
+                      src={item.images?.[0] || "/placeholder-image.jpg"}
                       alt={item.name}
                       className="w-12 h-12 object-cover rounded"
                     />
@@ -449,9 +501,7 @@ const Checkout = () => {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Shipping</span>
-                  <span>
-                    {getCartTotal() >= 50 ? 'Free' : '$9.99'}
-                  </span>
+                  <span>{getCartTotal() >= 50 ? "Free" : "$9.99"}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Tax</span>
@@ -470,8 +520,8 @@ const Checkout = () => {
                 disabled={loading}
                 className={`w-full py-3 px-4 rounded-lg font-medium text-white transition-colors duration-200 ${
                   loading
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-primary-600 hover:bg-primary-700'
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-primary-600 hover:bg-primary-700"
                 }`}
               >
                 {loading ? (
@@ -493,6 +543,6 @@ const Checkout = () => {
       </form>
     </div>
   );
-}
+};
 
-export default Checkout
+export default Checkout;

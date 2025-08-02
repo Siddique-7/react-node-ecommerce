@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { FiEye, FiEyeOff, FiMail, FiLock } from 'react-icons/fi';
+
+
+import  useAuth  from '../context/AuthContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -71,20 +73,17 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-700 via-purple-800 to-pink-800 text-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <div className="mx-auto h-12 w-12 bg-primary-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">E</span>
-          </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold ">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className=" mt-2 text-center text-sm ">
             Or{' '}
             <Link
               to="/register"
-              className="font-medium text-primary-600 hover:text-primary-500"
+              className="text-blue-400 hover:text-blue-500 cursor-pointer hover:text-primary-500"
             >
               create a new account
             </Link>
@@ -95,12 +94,12 @@ const Login = () => {
           <div className="space-y-4">
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium">
                 Email address
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiMail className="h-5 w-5 text-gray-400" />
+                  <FiMail className="h-5 w-5 " />
                 </div>
                 <input
                   id="email"
@@ -124,12 +123,12 @@ const Login = () => {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium">
                 Password
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiLock className="h-5 w-5 text-gray-400" />
+                  <FiLock className="h-5 w-5" />
                 </div>
                 <input
                   id="password"
@@ -171,7 +170,7 @@ const Login = () => {
                 type="checkbox"
                 className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+              <label htmlFor="remember-me" className="ml-2 block text-sm">
                 Remember me
               </label>
             </div>
@@ -179,7 +178,7 @@ const Login = () => {
             <div className="text-sm">
               <Link
                 to="/forgot-password"
-                className="font-medium text-primary-600 hover:text-primary-500"
+                className="text-blue-400 hover:text-blue-500 cursor-pointer font-medium text-primary-600"
               >
                 Forgot your password?
               </Link>
@@ -188,33 +187,33 @@ const Login = () => {
 
           <div>
             <button
-              type="submit"
-              disabled={loading}
-              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 ${
-                loading
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-primary-600 hover:bg-primary-700'
-              }`}
-            >
-              {loading ? (
-                <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                  Signing in...
-                </div>
-              ) : (
-                'Sign in'
-              )}
-            </button>
-          </div>
+  type="submit"
+  disabled={loading}
+   className={`group relative w-full flex justify-center items-center py-3 px-6 text-sm font-semibold rounded-lg text-white transition-all duration-200 ease-in-out shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 transform ${
+  loading
+    ? 'bg-gray-400 cursor-not-allowed'
+    : 'bg-primary-600 hover:bg-primary-700 hover:shadow-xl hover:scale-[1.02] cursor-pointer focus:ring-primary-500'
+}`}
+>
+  {loading ? (
+    <>
+      <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
+      <span>Signing in...</span>
+    </>
+  ) : (
+    'Sign in'
+  )}
+</button>
+      </div>
 
           <div className="text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm">
               Don't have an account?{' '}
               <Link
                 to="/register"
-                className="font-medium text-primary-600 hover:text-primary-500"
+                className="font-medium text-blue-400 hover:text-blue-500 cursor-pointer"
               >
-                Sign up here
+                register here
               </Link>
             </p>
           </div>

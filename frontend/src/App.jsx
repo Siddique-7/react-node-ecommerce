@@ -1,5 +1,5 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import PrivateRoute from './routes/PrivateRoute';
@@ -9,6 +9,7 @@ import AdminRoute from './routes/AdminRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ProductList from './pages/ProductList';
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
@@ -20,12 +21,14 @@ function App() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
       
+      {/* Outlet */}
       <main className="flex-1">
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/products" element={<ProductList />} />
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           
@@ -59,6 +62,7 @@ function App() {
             </div>
           } />
         </Routes>
+
       </main>
       
       <Footer />

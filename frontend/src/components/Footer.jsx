@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
   FiFacebook, 
@@ -14,19 +13,18 @@ const Footer = () => {
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">E</span>
-              </div>
-              <span className="text-xl font-bold">EShop</span>
+              <span className="text-xl font-bold">MERN Shop</span>
             </div>
             <p className="text-gray-400 text-sm">
               Your trusted online shopping destination. We offer high-quality products 
               with fast delivery and excellent customer service.
             </p>
             <div className="flex space-x-4">
+
               <a 
                 href="#" 
                 className="text-gray-400 hover:text-white transition-colors"
@@ -34,6 +32,7 @@ const Footer = () => {
               >
                 <FiFacebook size={20} />
               </a>
+
               <a 
                 href="#" 
                 className="text-gray-400 hover:text-white transition-colors"
@@ -41,6 +40,7 @@ const Footer = () => {
               >
                 <FiTwitter size={20} />
               </a>
+
               <a 
                 href="#" 
                 className="text-gray-400 hover:text-white transition-colors"
@@ -48,6 +48,7 @@ const Footer = () => {
               >
                 <FiInstagram size={20} />
               </a>
+              
             </div>
           </div>
 
@@ -167,7 +168,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} EShop. All rights reserved.
+              © {new Date().getFullYear()} MERNShop. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link 

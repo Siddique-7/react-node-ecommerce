@@ -1,13 +1,17 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { authAPI } from '../services/auth';
+import { createContext, useContext, useReducer, useEffect } from 'react';
 import { toast } from 'react-toastify';
+
+
+import  authAPI  from '../services/authAPI';
 
 const AuthContext = createContext();
 
 const authReducer = (state, action) => {
   switch (action.type) {
+
     case 'LOGIN_START':
       return { ...state, loading: true, error: null };
+
     case 'LOGIN_SUCCESS':
       localStorage.setItem('token', action.payload.token);
       return {
@@ -18,6 +22,7 @@ const authReducer = (state, action) => {
         isAuthenticated: true,
         error: null
       };
+
     case 'LOGIN_FAILURE':
       return { ...state, loading: false, error: action.payload, isAuthenticated: false };
     case 'LOGOUT':
@@ -38,6 +43,7 @@ const authReducer = (state, action) => {
         isAuthenticated: true,
         loading: false
       };
+
     case 'CLEAR_ERROR':
       return { ...state, error: null };
     case 'SET_LOADING':
@@ -47,15 +53,17 @@ const authReducer = (state, action) => {
   }
 };
 
+const token = localStorage.getItem('token');
+
 const initialState = {
   user: null,
-  token: localStorage.getItem('token'),
-  isAuthenticated: false,
+  token,
+  isAuthenticated: !!token,
   loading: false,
   error: null
 };
 
-export const AuthProvider = ({ children }) => {
+ export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   // Load user on app start if token exists
@@ -108,27 +116,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (userData) => {
-    try {
-      dispatch({ type: 'LOGIN_START' });
-      const response = await authAPI.register(userData);
-      
-      dispatch({
-        type: 'LOGIN_SUCCESS',
-        payload: {
-          user: response.data.user,
-          token: response.data.token
-        }
-      });
-      
-      toast.success('Registration successful!');
-      return { success: true };
-    } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Registration failed';
-      dispatch({ type: 'LOGIN_FAILURE', payload: errorMessage });
-      toast.error(errorMessage);
-      return { success: false, error: errorMessage };
-    }
-  };
+  try {
+    const response = await authAPI.register(userData);
+    toast.success('Registration successful!');
+    return { success: true };
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || 'Registration failed';
+    toast.error(errorMessage);
+    return { success: false, error: errorMessage };
+  }
+};
+
 
   const logout = () => {
     dispatch({ type: 'LOGOUT' });
@@ -155,10 +153,12 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => {
+ const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
+
+export default useAuth

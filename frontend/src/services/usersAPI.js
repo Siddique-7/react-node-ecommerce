@@ -1,6 +1,6 @@
 import api from './api';
 
-export const usersAPI = {
+ const usersAPI = {
   // Get user profile
   getUserProfile: () => {
     return api.get('/users/profile');
@@ -70,3 +70,5 @@ export const usersAPI = {
     return api.delete(`/users/admin/${userId}`);
   }
 };
+
+export default usersAPI

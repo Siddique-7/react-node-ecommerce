@@ -1,8 +1,9 @@
-import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
 import { FiMinus, FiPlus, FiTrash2, FiShoppingBag } from 'react-icons/fi';
+
+
+import  useCart  from '../context/CartContext';
+import  useAuth  from '../context/AuthContext';
 
 const Cart = () => {
   const { items, updateQuantity, removeFromCart, clearCart, getCartTotal } = useCart();

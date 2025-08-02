@@ -1,9 +1,10 @@
 import api from './api';
 
-export const authAPI = {
+ const authAPI = {
   // Register new user
-  register: (userData) => {
-    return api.post('/auth/register', userData);
+  register: (formData) => {
+    console.log("Sending data to API:", formData);
+    return api.post('/auth/register', formData);
   },
 
   // Login user
@@ -11,10 +12,10 @@ export const authAPI = {
     return api.post('/auth/login', credentials);
   },
 
-  // // Get user profile
-  // getProfile: () => {
-  //   return api.get('/auth/profile');
-  // },
+  // Get user profile
+  getProfile: () => {
+    return api.get('/auth/profile');
+  },
 
   // // Update user profile
   // updateProfile: (userData) => {
@@ -41,3 +42,5 @@ export const authAPI = {
   //   return api.post('/auth/logout');
   // }
 };
+
+export default authAPI

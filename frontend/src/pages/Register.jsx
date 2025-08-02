@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { FiEye, FiEyeOff, FiMail, FiLock, FiUser } from 'react-icons/fi';
+
+
+import  useAuth  from '../context/AuthContext';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -73,53 +75,45 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    console.log("Submitting form:", formData);
+
     if (!validateForm()) {
-      return;
-    }
+    return; // Stop submission if form is invalid
+  }
+    
+    try {
+      // Assume you call your signup API here
+      const res = await register(formData);
 
-    const result = await register({
-      name: formData.name.trim(),
-      email: formData.email,
-      password: formData.password
-    });
-
-    if (result.success) {
-      navigate('/', { replace: true });
+      if (res.success) {
+        // Redirect to login
+        navigate('/login');
+      }
+    } catch (err) {
+      console.error('Signup failed', err);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-700 via-purple-800 to-pink-800 text-white px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+
         <div>
-          <div className="mx-auto h-12 w-12 bg-primary-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">E</span>
-          </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold ">
             Create your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link
-              to="/login"
-              className="font-medium text-primary-600 hover:text-primary-500"
-            >
-              sign in to your existing account
-            </Link>
-          </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="text-white mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             {/* Name Field */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="name" className="block text-sm font-medium ">
                 Full Name
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiUser className="h-5 w-5 text-gray-400" />
+                  <FiUser className="h-5 w-5 " />
                 </div>
                 <input
                   id="name"
@@ -143,12 +137,12 @@ const Register = () => {
 
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium ">
                 Email address
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiMail className="h-5 w-5 text-gray-400" />
+                  <FiMail className="h-5 w-5 " />
                 </div>
                 <input
                   id="email"
@@ -172,12 +166,12 @@ const Register = () => {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium ">
                 Password
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiLock className="h-5 w-5 text-gray-400" />
+                  <FiLock className="h-5 w-5 " />
                 </div>
                 <input
                   id="password"
@@ -212,12 +206,12 @@ const Register = () => {
 
             {/* Confirm Password Field */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium ">
                 Confirm Password
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiLock className="h-5 w-5 text-gray-400" />
+                  <FiLock className="h-5 w-5 " />
                 </div>
                 <input
                   id="confirmPassword"
@@ -252,60 +246,68 @@ const Register = () => {
           </div>
 
           <div className="flex items-center">
-            <input
-              id="agree-terms"
-              name="agree-terms"
-              type="checkbox"
-              required
-              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-            />
-            <label htmlFor="agree-terms" className="ml-2 block text-sm text-gray-900">
-              I agree to the{' '}
-              <Link to="/terms" className="text-primary-600 hover:text-primary-500">
-                Terms of Service
-              </Link>{' '}
-              and{' '}
-              <Link to="/privacy" className="text-primary-600 hover:text-primary-500">
-                Privacy Policy
-              </Link>
-            </label>
-          </div>
+  <input
+    id="agree-terms"
+    name="agree-terms"
+    type="checkbox"
+    required
+    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+  />
+  <label htmlFor="agree-terms" className="ml-2 block text-sm text-gray-900">
+    I agree to the{' '}
+    <Link
+      to="/terms"
+      className="text-blue-400 hover:text-blue-500 cursor-pointer"
+    >
+      Terms of Service
+    </Link>{' '}
+    and{' '}
+    <Link
+      to="/privacy"
+      className="text-blue-400 hover:text-blue-500 cursor-pointer"
+    >
+      Privacy Policy
+    </Link>
+  </label>
+</div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 ${
-                loading
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-primary-600 hover:bg-primary-700'
-              }`}
-            >
-              {loading ? (
-                <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                  Creating account...
-                </div>
-              ) : (
-                'Create Account'
-              )}
-            </button>
-          </div>
 
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              Already have an account?{' '}
-              <Link
-                to="/login"
-                className="font-medium text-primary-600 hover:text-primary-500"
-              >
-                Sign in here
-              </Link>
-            </p>
-          </div>
-        </form>
+         <div className="mt-4 mb-2">
+  <button
+    type="submit"
+    disabled={loading}
+    className={`group relative w-full flex justify-center items-center py-3 px-6 text-sm font-semibold rounded-lg text-white transition-all duration-200 ease-in-out shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 transform ${
+  loading
+    ? 'bg-gray-400 cursor-not-allowed'
+    : 'bg-primary-600 hover:bg-primary-700 hover:shadow-xl hover:scale-[1.02] cursor-pointer focus:ring-primary-500'
+}`}
+  >
+    {loading ? (
+      <div className="flex items-center">
+        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+        Creating account...
       </div>
-    </div>
+    ) : (
+      'Create Account'
+    )}
+  </button>
+</div>
+
+<div className="text-center mb-8">
+  <p className="text-sm ">
+    Already have an account?{' '}
+    <Link
+      to="/login"
+      className="font-medium text-blue-400 hover:text-blue-500 cursor-pointer"
+    >
+      Sign in here
+    </Link>
+  </p>
+</div>
+</form>
+
+</div>
+</div>
   );
 };
 
