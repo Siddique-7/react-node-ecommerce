@@ -80,7 +80,7 @@ const ProductDetails = () => {
 
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 bg-gradient-to-r from-white via-gray-200 to-white sm:px-6 lg:px-8 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Product Images */}
         <div className="space-y-4">
@@ -88,7 +88,7 @@ const ProductDetails = () => {
             <img
               src={product.image || "/placeholder-image.jpg"}
               alt={product.title}
-              className="w-full h-full object-cover"
+              className="w-full h-320 object-cover"
             />
           </div>
         </div>
@@ -176,14 +176,10 @@ const ProductDetails = () => {
                   : "bg-primary-600 hover:bg-primary-700 text-white"
               }`}
             >
-              <FiShoppingCart size={20} />
-              <span>
+              <span className="text-black cursor-pointer"><FiShoppingCart size={20} /></span>
+              <span className="text-black cursor-pointer">
                 {product.countInStock === 0 ? "Out of Stock" : "Add to Cart"}
               </span>
-            </button>
-
-            <button className="p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-              <FiHeart size={20} />
             </button>
           </div>
 
@@ -192,7 +188,7 @@ const ProductDetails = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <FiTruck className="text-primary-600" size={16} />
-                <span>Free shipping over $50</span>
+                <span>Free shipping over ₹500</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <FiShield className="text-primary-600" size={16} />
@@ -200,7 +196,7 @@ const ProductDetails = () => {
               </div>
               <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <FiRefreshCw className="text-primary-600" size={16} />
-                <span>30-day returns</span>
+                <span>15-day returns</span>
               </div>
             </div>
           </div>

@@ -300,7 +300,7 @@ const Register = () => {
       to="/login"
       className="font-medium text-blue-400 hover:text-blue-500 cursor-pointer"
     >
-      Sign in here
+      Login in here
     </Link>
   </p>
 </div>

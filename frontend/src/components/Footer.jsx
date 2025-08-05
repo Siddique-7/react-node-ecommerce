@@ -145,19 +145,19 @@ const Footer = () => {
               <div className="flex items-center space-x-3">
                 <FiMapPin className="text-primary-500" size={16} />
                 <span className="text-gray-400 text-sm">
-                  123 Shopping Street, City, State 12345
+                  123 Shopping Street, Kanpur, IND
                 </span>
               </div>
               <div className="flex items-center space-x-3">
                 <FiPhone className="text-primary-500" size={16} />
                 <span className="text-gray-400 text-sm">
-                  +1 (555) 123-4567
+                  +91 9336620815
                 </span>
               </div>
               <div className="flex items-center space-x-3">
                 <FiMail className="text-primary-500" size={16} />
                 <span className="text-gray-400 text-sm">
-                  support@eshop.com
+                  muhammadsiddik687@gmail.com
                 </span>
               </div>
             </div>

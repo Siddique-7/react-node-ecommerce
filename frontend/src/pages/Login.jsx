@@ -77,7 +77,7 @@ const Login = () => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold ">
-            Sign in to your account
+            Login to your account
           </h2>
           <p className=" mt-2 text-center text-sm ">
             Or{' '}
@@ -198,10 +198,10 @@ const Login = () => {
   {loading ? (
     <>
       <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
-      <span>Signing in...</span>
+      <span>Login ...</span>
     </>
   ) : (
-    'Sign in'
+    'Login'
   )}
 </button>
       </div>

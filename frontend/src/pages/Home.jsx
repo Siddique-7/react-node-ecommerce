@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FiArrowRight, FiUserPlus, FiShoppingBag,FiHeadphones, FiStar} from "react-icons/fi";
 import { toast } from "react-toastify";
 
@@ -10,8 +10,9 @@ import Loader from "../components/Loader";
 import Hero from "../components/Hero.jsx";
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
@@ -53,14 +54,14 @@ const Home = () => {
        <Hero />     
 
       {/* 2- Products Section - Shows message if no products */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 text-white ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-12">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-bold mb-4">
                 Our Products
               </h2>
-              <p className="text-gray-600">Browse our latest additions</p>
+              <p>Browse our latest additions</p>
             </div>
             
 
@@ -95,24 +96,27 @@ const Home = () => {
             </>
           ) : (
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg mb-4">
+              <p className=" text-lg mb-4">
                 No products available at the moment
               </p>
-
-              <Link
-                to="/products"
-                className="inline-flex items-center space-x-2 btn-primary"
-              >
-                <span>Check All Products</span>
-                <FiArrowRight />
-              </Link>
-            </div>
+              </div>
           )}
+            
+<div className="text-center mt-8">
+  <Link
+    to="/products"
+    className="inline-flex items-center space-x-2 btn-primary"
+  >
+    <span>View All Products</span>
+    <FiArrowRight />
+  </Link>
+</div>
+
         </div>
       </section>
 
       {/* 3- CTA Section */}
-            <section className="relative py-20 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white overflow-hidden">
+            <section className="relative py-20 bg-indigo-800 text-white overflow-hidden">
       {/* Static Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
@@ -140,14 +144,18 @@ const Home = () => {
 
         {/* CTA Buttons - Enhanced to Match Hero */}
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-          <button className="group relative inline-flex items-center space-x-3 bg-gradient-to-r from-blue-500 to-purple-600 px-10 py-4 rounded-2xl font-bold text-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
+          <button 
+          onClick={() => navigate('/register')}
+          className="cursor-pointer group relative inline-flex items-center space-x-3 bg-gradient-to-r from-blue-500 to-purple-600 px-10 py-4 rounded-2xl font-bold text-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
             <FiUserPlus className="w-5 h-5" />
             <span>Create Account</span>
             <FiArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
             <div className="absolute inset-0 bg-white/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
           
-          <button className="group inline-flex items-center space-x-3 border-2 border-white/30 px-10 py-4 rounded-2xl font-bold text-lg hover:bg-white/10 hover:border-white/50 transition-all duration-300 backdrop-blur-sm">
+          <button 
+          onClick={() => navigate('/products')}
+          className="cursor-pointer group inline-flex items-center space-x-3 border-2 border-white/30 px-10 py-4 rounded-2xl font-bold text-lg hover:bg-white/10 hover:border-white/50 transition-all duration-300 backdrop-blur-sm">
             <FiShoppingBag className="w-5 h-5" />
             <span>Browse Products</span>
             <FiArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />

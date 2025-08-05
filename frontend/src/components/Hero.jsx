@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiArrowRight, FiStar, FiTruck, FiShield, FiUsers } from 'react-icons/fi';
 
 const Hero = () => {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   
   const heroSlides = [
@@ -43,7 +45,7 @@ const Hero = () => {
 
   
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white overflow-hidden">
+    <section className="relative min-h-screen bg-indigo-800  text-white overflow-hidden">
       
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
@@ -72,6 +74,7 @@ const Hero = () => {
         <div className="w-full">
           {/* Main Hero Content */}
           <div className="text-center mb-16">
+
             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 animate-fade-in">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
               <span className="text-sm font-medium">{currentHero.accent}</span>
@@ -86,14 +89,16 @@ const Hero = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-slide-up delay-300">
-              <button className="group relative inline-flex items-center space-x-3 bg-gradient-to-r from-blue-500 to-purple-600 px-10 py-4 rounded-2xl font-bold text-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
+              <button 
+               onClick={() => navigate('/products')}
+              className="cursor-pointer group relative inline-flex items-center space-x-3 bg-gradient-to-r from-blue-500 to-purple-600 px-10 py-4 rounded-2xl font-bold text-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
                 <span>{currentHero.cta}</span>
                 <FiArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
                 <div className="absolute inset-0 bg-white/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
               
               <button className="inline-flex items-center space-x-2 border-2 border-white/30 px-8 py-4 rounded-2xl font-semibold hover:bg-white/10 hover:border-white/50 transition-all duration-300 backdrop-blur-sm">
-                <span>View Categories</span>
+                <span>Top Brands</span>
               </button>
             </div>
 

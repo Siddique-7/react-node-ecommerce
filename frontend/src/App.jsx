@@ -7,6 +7,7 @@ import AdminRoute from './routes/AdminRoute';
 
 // Pages
 import Home from './pages/Home';
+import About from './pages/About';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProductList from './pages/ProductList';
@@ -26,6 +27,7 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/products" element={<ProductList />} />

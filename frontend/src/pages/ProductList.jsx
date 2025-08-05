@@ -12,7 +12,7 @@ const ProductListPage = () => {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
+    <div className="grid grid-cols-1 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
       {products.length > 0 ? (
         products.map((product) => (
           <ProductCard key={product._id} product={product} />
