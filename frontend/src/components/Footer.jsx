@@ -119,22 +119,6 @@ const Footer = () => {
                   Returns & Exchanges
                 </Link>
               </li>
-              <li>
-                <Link 
-                  to="/privacy" 
-                  className="text-gray-400 hover:text-white transition-colors text-sm"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/terms" 
-                  className="text-gray-400 hover:text-white transition-colors text-sm"
-                >
-                  Terms of Service
-                </Link>
-              </li>
             </ul>
           </div>
 

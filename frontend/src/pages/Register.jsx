@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiEye, FiEyeOff, FiMail, FiLock, FiUser } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 
-
-import  useAuth  from '../context/AuthContext';
+import useAuth from '../context/AuthContext';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -31,7 +31,6 @@ const Register = () => {
       ...prev,
       [name]: value
     }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -75,239 +74,199 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting form:", formData);
 
     if (!validateForm()) {
-    return; // Stop submission if form is invalid
-  }
+      return;
+    }
     
     try {
-      // Assume you call your signup API here
       const res = await register(formData);
 
       if (res.success) {
-        // Redirect to login
+        toast.success("Account created successfully!");
         navigate('/login');
       }
     } catch (err) {
       console.error('Signup failed', err);
+      toast.error(err.message || 'Signup failed. Please try again.');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-700 via-purple-800 to-pink-800 text-white px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-700 via-purple-800 to-pink-800 text-white px-4 sm:px-6 py-12">
+      <div className="max-w-md w-full bg-white/10 p-8 rounded-lg shadow-xl">
+        <h2 className="text-center text-3xl font-bold mb-2">Create your account</h2>
+        <p className="text-sm text-center mb-6">
+          Or{' '}
+          <Link to="/login" className="text-blue-300 hover:text-blue-500 underline">
+            login to your account
+          </Link>
+        </p>
 
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold ">
-            Create your account
-          </h2>
-        </div>
-
-        <form className="text-white mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            {/* Name Field */}
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium ">
-                Full Name
-              </label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiUser className="h-5 w-5 " />
-                </div>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  autoComplete="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className={`block w-full pl-10 pr-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
-                    errors.name 
-                      ? 'border-red-300 text-red-900 placeholder-red-300' 
-                      : 'border-gray-300 placeholder-gray-400'
-                  }`}
-                  placeholder="Enter your full name"
-                />
-              </div>
-              {errors.name && (
-                <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-              )}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Name Field */}
+          <div>
+            <label htmlFor="name" className="block text-sm mb-1">Full Name</label>
+            <div className="relative">
+              <span className="absolute left-3 top-2.5 text-white">
+                <FiUser />
+              </span>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                autoComplete="name"
+                value={formData.name}
+                onChange={handleChange}
+                className={`w-full pl-10 pr-3 py-2 rounded-md border focus:ring-2 focus:outline-none text-black ${
+                  errors.name ? 'border-red-500' : 'border-gray-300'
+                }`}
+                placeholder="Enter your full name"
+              />
             </div>
-
-            {/* Email Field */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium ">
-                Email address
-              </label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiMail className="h-5 w-5 " />
-                </div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`block w-full pl-10 pr-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
-                    errors.email 
-                      ? 'border-red-300 text-red-900 placeholder-red-300' 
-                      : 'border-gray-300 placeholder-gray-400'
-                  }`}
-                  placeholder="Enter your email"
-                />
-              </div>
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-              )}
-            </div>
-
-            {/* Password Field */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium ">
-                Password
-              </label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiLock className="h-5 w-5 " />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="new-password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={`block w-full pl-10 pr-10 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
-                    errors.password 
-                      ? 'border-red-300 text-red-900 placeholder-red-300' 
-                      : 'border-gray-300 placeholder-gray-400'
-                  }`}
-                  placeholder="Create a password"
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <FiEyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  ) : (
-                    <FiEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  )}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-              )}
-            </div>
-
-            {/* Confirm Password Field */}
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium ">
-                Confirm Password
-              </label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FiLock className="h-5 w-5 " />
-                </div>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  autoComplete="new-password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className={`block w-full pl-10 pr-10 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
-                    errors.confirmPassword 
-                      ? 'border-red-300 text-red-900 placeholder-red-300' 
-                      : 'border-gray-300 placeholder-gray-400'
-                  }`}
-                  placeholder="Confirm your password"
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? (
-                    <FiEyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  ) : (
-                    <FiEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  )}
-                </button>
-              </div>
-              {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
-              )}
-            </div>
+            {errors.name && (
+              <p className="text-sm text-red-400 mt-1">{errors.name}</p>
+            )}
           </div>
 
+          {/* Email Field */}
+          <div>
+            <label htmlFor="email" className="block text-sm mb-1">Email Address</label>
+            <div className="relative">
+              <span className="absolute left-3 top-2.5 text-white">
+                <FiMail />
+              </span>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={formData.email}
+                onChange={handleChange}
+                className={`w-full pl-10 pr-3 py-2 rounded-md border focus:ring-2 focus:outline-none text-black ${
+                  errors.email ? 'border-red-500' : 'border-gray-300'
+                }`}
+                placeholder="you@example.com"
+              />
+            </div>
+            {errors.email && (
+              <p className="text-sm text-red-400 mt-1">{errors.email}</p>
+            )}
+          </div>
+
+          {/* Password Field */}
+          <div>
+            <label htmlFor="password" className="block text-sm mb-1">Password</label>
+            <div className="relative">
+              <span className="absolute left-3 top-2.5 text-white">
+                <FiLock />
+              </span>
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="new-password"
+                value={formData.password}
+                onChange={handleChange}
+                className={`w-full pl-10 pr-10 py-2 rounded-md border focus:ring-2 focus:outline-none text-black ${
+                  errors.password ? 'border-red-500' : 'border-gray-300'
+                }`}
+                placeholder="Create a password"
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-2.5 text-gray-500 hover:text-white"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </button>
+            </div>
+            {errors.password && (
+              <p className="text-sm text-red-400 mt-1">{errors.password}</p>
+            )}
+          </div>
+
+          {/* Confirm Password Field */}
+          <div>
+            <label htmlFor="confirmPassword" className="block text-sm mb-1">Confirm Password</label>
+            <div className="relative">
+              <span className="absolute left-3 top-2.5 text-white">
+                <FiLock />
+              </span>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type={showConfirmPassword ? 'text' : 'password'}
+                autoComplete="new-password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className={`w-full pl-10 pr-10 py-2 rounded-md border focus:ring-2 focus:outline-none text-black ${
+                  errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                }`}
+                placeholder="Confirm your password"
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-2.5 text-gray-500 hover:text-white"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+              </button>
+            </div>
+            {errors.confirmPassword && (
+              <p className="text-sm text-red-400 mt-1">{errors.confirmPassword}</p>
+            )}
+          </div>
+
+          {/* Terms & Privacy */}
           <div className="flex items-center">
-  <input
-    id="agree-terms"
-    name="agree-terms"
-    type="checkbox"
-    required
-    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-  />
-  <label htmlFor="agree-terms" className="ml-2 block text-sm text-gray-900">
-    I agree to the{' '}
-    <Link
-      to="/terms"
-      className="text-blue-400 hover:text-blue-500 cursor-pointer"
-    >
-      Terms of Service
-    </Link>{' '}
-    and{' '}
-    <Link
-      to="/privacy"
-      className="text-blue-400 hover:text-blue-500 cursor-pointer"
-    >
-      Privacy Policy
-    </Link>
-  </label>
-</div>
+            <input
+              id="agree-terms"
+              name="agree-terms"
+              type="checkbox"
+              required
+              className="h-4 w-4 rounded text-blue-400 focus:ring-blue-500 border-gray-300"
+            />
+            <label htmlFor="agree-terms" className="ml-2 block text-sm text-white">
+              I agree to the{' '}
+              <Link to="/terms" className="text-blue-300 hover:text-blue-500 underline">
+                Terms of Service
+              </Link>{' '}
+              and{' '}
+              <Link to="/privacy" className="text-blue-300 hover:text-blue-500 underline">
+                Privacy Policy
+              </Link>
+            </label>
+          </div>
 
-
-         <div className="mt-4 mb-2">
-  <button
-    type="submit"
-    disabled={loading}
-    className={`group relative w-full flex justify-center items-center py-3 px-6 text-sm font-semibold rounded-lg text-white transition-all duration-200 ease-in-out shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 transform ${
-  loading
-    ? 'bg-gray-400 cursor-not-allowed'
-    : 'bg-primary-600 hover:bg-primary-700 hover:shadow-xl hover:scale-[1.02] cursor-pointer focus:ring-primary-500'
-}`}
-  >
-    {loading ? (
-      <div className="flex items-center">
-        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-        Creating account...
+          {/* Submit Button */}
+          <div>
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full flex justify-center items-center cursor-pointer gap-2 py-3 px-4 rounded-md font-semibold text-white shadow-md transition-transform duration-200 ${
+                loading
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700 hover:scale-105'
+              }`}
+            >
+              {loading && (
+                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              )}
+              {loading ? 'Creating account...' : 'Create Account'}
+            </button>
+          </div>
+        </form>
+        <div className="mt-6 text-center">
+          <p className="text-sm">
+            Already have an account?{' '}
+            <Link to="/login" className="font-medium text-blue-300 hover:text-blue-500 underline">
+              Login in here
+            </Link>
+          </p>
+        </div>
       </div>
-    ) : (
-      'Create Account'
-    )}
-  </button>
-</div>
-
-<div className="text-center mb-8">
-  <p className="text-sm ">
-    Already have an account?{' '}
-    <Link
-      to="/login"
-      className="font-medium text-blue-400 hover:text-blue-500 cursor-pointer"
-    >
-      Login in here
-    </Link>
-  </p>
-</div>
-</form>
-
-</div>
-</div>
+    </div>
   );
 };
 

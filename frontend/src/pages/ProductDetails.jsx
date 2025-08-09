@@ -8,6 +8,8 @@ import {
   FiTruck,
   FiShield,
   FiRefreshCw,
+  FiX,
+  FiCheck,
 } from "react-icons/fi";
 import { toast } from "react-toastify";
 
@@ -19,6 +21,7 @@ const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { isInCart } = useCart(); // Assuming isInCart is also available from your CartContext
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -47,6 +50,7 @@ const ProductDetails = () => {
       for (let i = 0; i < quantity; i++) {
         addToCart(product);
       }
+      toast.success("Added to cart!");
     } else {
       toast.error("Product is out of stock");
     }
@@ -78,125 +82,161 @@ const ProductDetails = () => {
     );
   }
 
-
   return (
-    <div className="max-w-7xl mx-auto px-4 bg-gradient-to-r from-white via-gray-200 to-white sm:px-6 lg:px-8 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        {/* Product Images */}
-        <div className="space-y-4">
-          <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-            <img
-              src={product.image || "/placeholder-image.jpg"}
-              alt={product.title}
-              className="w-full h-320 object-cover"
-            />
-          </div>
-        </div>
-
-        {/* Product Info */}
-        <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {product.title}
-            </h1>
-            {product.category && (
-              <p className="text-gray-600">{product.category}</p>
-            )}
+    <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Product Images */}
+          <div className="bg-white p-8 rounded-xl shadow-lg">
+            <div className="aspect-square rounded-lg overflow-hidden">
+              <img
+                src={product.image || "/placeholder-image.jpg"}
+                alt={product.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
 
-          {/* Price */}
-          <div className="flex items-center space-x-4">
-            <span className="text-3xl font-bold text-gray-900">
-              ${product.price}
-            </span>
-          </div>
-
-          {/* Stock Status */}
-          <div className="flex items-center space-x-2">
-            <div
-              className={`w-3 h-3 rounded-full ${
-                product.countInStock > 0 ? "bg-green-500" : "bg-red-500"
-              }`}
-            ></div>
-            <span
-              className={`font-medium ${
-                product.countInStock > 0 ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {product.countInStock > 0
-                ? `${product.countInStock} in stock`
-                : "Out of stock"}
-            </span>
-          </div>
-
-          {/* Description */}
-          {product.description && (
+          {/* Product Info */}
+          <div className="bg-white p-8 rounded-xl shadow-lg space-y-8">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Description
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                {product.description}
+              <p className="text-sm text-gray-500 font-medium uppercase mb-2">
+                {product.category || "Category"}
               </p>
+              <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
+                {product.title}
+              </h1>
             </div>
-          )}
 
-          {/* Quantity Selector */}
-          {product.countInStock > 0 && (
+            {/* Price */}
             <div className="flex items-center space-x-4">
-              <span className="text-gray-700 font-medium">Quantity:</span>
-              <div className="flex items-center border border-gray-300 rounded-lg">
-                <button
-                  onClick={() => handleQuantityChange(-1)}
-                  disabled={quantity <= 1}
-                  className="p-2 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <FiMinus size={16} />
-                </button>
-                <span className="px-4 py-2 font-medium">{quantity}</span>
-                <button
-                  onClick={() => handleQuantityChange(1)}
-                  disabled={quantity >= product.countInStock}
-                  className="p-2 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <FiPlus size={16} />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          <div className="flex space-x-4">
-            <button
-              onClick={handleAddToCart}
-              disabled={product.countInStock === 0}
-              className={`flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-medium transition-colors duration-200 ${
-                product.countInStock === 0
-                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                  : "bg-primary-600 hover:bg-primary-700 text-white"
-              }`}
-            >
-              <span className="text-black cursor-pointer"><FiShoppingCart size={20} /></span>
-              <span className="text-black cursor-pointer">
-                {product.countInStock === 0 ? "Out of Stock" : "Add to Cart"}
+              <span className="text-4xl font-extrabold text-primary-600">
+                ₹{product.price}
               </span>
-            </button>
-          </div>
+            </div>
 
-          {/* Features */}
-          <div className="border-t pt-6">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <FiTruck className="text-primary-600" size={16} />
-                <span>Free shipping over ₹500</span>
+            {/* Stock Status */}
+            <div className="flex items-center space-x-2">
+              <div
+                className={`w-3 h-3 rounded-full ${
+                  product.countInStock > 0 ? "bg-green-500" : "bg-red-500"
+                }`}
+              ></div>
+              <span
+                className={`font-semibold ${
+                  product.countInStock > 0 ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {product.countInStock > 0
+                  ? `${product.countInStock} in stock`
+                  : "Out of stock"}
+              </span>
+            </div>
+
+            {/* Description */}
+            {product.description && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Description
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {product.description}
+                </p>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <FiShield className="text-primary-600" size={16} />
-                <span>1 year warranty</span>
+            )}
+
+            {/* Quantity Selector */}
+            {product.countInStock > 0 && (
+              <div className="flex items-center space-x-4">
+                <span className="text-gray-700 font-medium">Quantity:</span>
+                <div className="flex items-center bg-gray-100 rounded-full overflow-hidden">
+                  <button
+                    onClick={() => handleQuantityChange(-1)}
+                    disabled={quantity <= 1}
+                    className="p-3 text-gray-600 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <FiMinus size={16} />
+                  </button>
+                  <span className="px-4 py-2 font-medium text-gray-900">{quantity}</span>
+                  <button
+                    onClick={() => handleQuantityChange(1)}
+                    disabled={quantity >= product.countInStock}
+                    className="p-3 text-gray-600 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <FiPlus size={16} />
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <FiRefreshCw className="text-primary-600" size={16} />
-                <span>15-day returns</span>
+            )}
+             {/* Add to Cart Button - UPDATED */}
+            <div className="p-4 pt-0">
+              <button
+                onClick={handleAddToCart}
+                disabled={product.countInStock === 0 || isInCart(product._id)}
+                aria-label={
+                  product.countInStock === 0 
+                    ? 'Product out of stock' 
+                    : isInCart(product._id) 
+                      ? 'Product already in cart' 
+                      : `Add ${product.title} to cart`
+                }
+                className={`
+                  w-full flex items-center justify-center gap-2 py-3 px-4 
+                  rounded-lg font-medium transition-all duration-300 
+                  transform hover:scale-105 active:scale-95
+                  ${product.countInStock === 0 
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                    : isInCart(product._id)
+                      ? 'bg-green-700 text-white hover:bg-green-800' 
+                      : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg'
+                  }
+                `}
+              >
+                {/* Dynamic Icon */}
+                {product.countInStock === 0 ? (
+                  <FiX size={18} />
+                ) : isInCart(product._id) ? (
+                  <FiCheck size={18} />
+                ) : (
+                  <FiShoppingCart size={18} />
+                )}
+                
+                {/* Dynamic Text */}
+                <span className="text-sm font-semibold">
+                  {product.countInStock === 0
+                    ? 'Out of Stock'
+                    : isInCart(product._id)
+                      ? 'In Cart'
+                      : 'Add to Cart'
+                  }
+                </span>
+              </button>
+              
+              {/* Optional: Stock status below button */}
+              {product.countInStock > 0 && product.countInStock <= 10 && (
+                <p className="text-center text-sm text-gray-600 mt-2">
+                  {product.countInStock <= 5 
+                    ? `Hurry! Only ${product.countInStock} items left` 
+                    : `${product.countInStock} items available`
+                  }
+                </p>
+              )}
+            </div>
+            {/* Features */}
+            <div className="border-t pt-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <FiTruck className="text-primary-600" size={16} />
+                  <span>Free shipping over ₹200</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <FiShield className="text-primary-600" size={16} />
+                  <span>1 year warranty</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <FiRefreshCw className="text-primary-600" size={16} />
+                  <span>15-day returns</span>
+                </div>
               </div>
             </div>
           </div>

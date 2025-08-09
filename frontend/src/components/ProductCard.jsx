@@ -48,7 +48,7 @@ const ProductCard = ({ product }) => {
 
           {/* Price */}
           <div className="flex items-center mb-3">
-            <span className="text-lg font-bold text-green-600">${product.price}</span>
+            <span className="text-lg font-bold text-green-600">₹{product.price}</span>
           </div>
 
           {/* Description */}

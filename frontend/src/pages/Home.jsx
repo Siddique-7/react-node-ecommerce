@@ -173,11 +173,11 @@ const Home = () => {
           
           <div className="p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300">
             <div className="text-2xl font-bold mb-2 text-purple-400">Free</div>
-            <div className="text-sm text-gray-300">Shipping Over $50</div>
+            <div className="text-sm text-gray-300">Shipping Over ₹200</div>
           </div>
           
           <div className="p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300">
-            <div className="text-2xl font-bold mb-2 text-pink-400">30-Day</div>
+            <div className="text-2xl font-bold mb-2 text-pink-400">7-Day</div>
             <div className="text-sm text-gray-300">Money Back Guarantee</div>
           </div>
         </div>
