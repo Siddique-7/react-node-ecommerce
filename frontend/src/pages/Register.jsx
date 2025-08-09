@@ -83,11 +83,13 @@ const Register = () => {
       const res = await register(formData);
 
       if (res.success) {
-        toast.success("Account created successfully!");
+        // The toast message is now assumed to be handled within the register function.
+        // We only need to navigate on success.
         navigate('/login');
       }
     } catch (err) {
       console.error('Signup failed', err);
+      // The toast.error is still here to catch any unexpected errors from the API call.
       toast.error(err.message || 'Signup failed. Please try again.');
     }
   };
