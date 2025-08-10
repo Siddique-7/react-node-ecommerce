@@ -1,126 +1,114 @@
-# 🛒 Ecommerce App
+# 🛒 MERN Ecommerce App
+Full-featured ecommerce platform built with MERN stack, supporting user authentication, product management, orders, and image uploads — fully functional backend and frontend deployed.
 
-A full-stack MERN-based Ecommerce application that allows users to register, authenticate, browse products, place orders, and upload product images. Backend is fully implemented; frontend development is in progress.
+# 🚀 Live Demo
 
----
+Check out the live demo of our project here:
 
-## ✅ Features
+👉 [https://react-node-ecommerce-nine.vercel.app/](https://react-node-ecommerce-nine.vercel.app/)
 
-- User Registration & Login (JWT Auth)
-- Protected Routes for Users
-- Product CRUD (Create, Read, Update, Delete)
-- Order Placement 
-- Cloudinary-based Image Upload
-- RESTful API with MVC structure
-- MongoDB Database Integration
+# 📷 Screenshots
 
----
+![Homepage](https://res.cloudinary.com/dauvdrmb7/image/upload/v1754827337/Screenshot_2025-08-10_172623_djw6ik.png)
+
+![Product Page](https://res.cloudinary.com/dauvdrmb7/image/upload/v1754827327/Screenshot_2025-08-10_172736_ckqdpf.png)
+
+
+## 🔧 Features
+- Secure user registration & login (JWT)
+- Role-based protected routes (User/Admin)
+- Product CRUD with Cloudinary image uploads
+- Order creation & management
+- Responsive SPA with client-side routing and SPA fallback (Vercel rewrites)
+- Modular MVC backend architecture
+  
 
 ## 🛠️ Tech Stack
+- **Frontend:** React.js, TailwindCSS, Vite
+- **Backend:** Node.js, Express.js, MongoDB, Mongoose
+- **Image Upload:** Cloudinary + Multer (memory storage)
+- **Auth:** JWT-based authentication & role-based access
+- **Dev Tools:** Nodemon, Postman
 
-**Frontend** (Coming Soon):
-- React.js
-- TailwindCSS
-
-**Backend**:
-- Node.js
-- Express.js
-- MongoDB + Mongoose
-- Cloudinary (for image upload)
-- Multer
-- JWT Authentication
-- Dotenv
-
-**Tools**:
-- Postman (API Testing)
-- Nodemon (Dev Server)
-
----
 
 ## 📁 Folder Structure
 
 ```
 ecommerce-app/
-│
-├── frontend/ # React frontend (in progress)
 ├── backend/
-│ ├── src/
-│ │ ├── config/
-│ │ ├── controllers/
-│ │ │ ├── auth.controller.js
-│ │ │ ├── order.controller.js
-│ │ │ └── product.controller.js
-│ │ ├── db/
-│ │ │ └── connectDB.js
-│ │ ├── middlewares/
-│ │ │ ├── auth.middleware.js
-│ │ │ └── upload.middleware.js
-│ │ ├── models/
-│ │ │ ├── order.model.js
-│ │ │ ├── product.model.js
-│ │ │ └── user.model.js
-│ │ ├── routes/
-│ │ │ ├── auth.routes.js
-│ │ │ ├── order.routes.js
-│ │ │ └── product.routes.js
-│ │ ├── utils/
-│ │ │ └── cloudinary.js
-│ │ ├── app.js
-│ │ └── index.js
-│ ├── uploads/ # Uploaded images
-│ ├── .env # Env variables (not committed)
-│ ├── .gitignore
-│ ├── package.json
-│ └── package-lock.json
+│   ├── node_modules/
+│   ├── src/
+│   │   ├── config/               # cloudinary.js config
+│   │   ├── controllers/          # auth, order, product controllers
+│   │   ├── db/                   # MongoDB connection
+│   │   ├── middlewares/          # auth & upload middlewares
+│   │   ├── models/               # Mongoose schemas
+│   │   ├── routes/               # API routes
+│   │   ├── app.js                # Express app
+│   │   └── index.js              # Server entry point
+│   ├── .env                     # Env variables (gitignored)
+│   ├── package.json
+│   └── package-lock.json
+│
+├── frontend/
+│   ├── node_modules/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/           # UI components (Navbar, Footer, etc.)
+│   │   ├── context/              # React contexts (Auth, Cart)
+│   │   ├── pages/                # Route pages (Login, Home, ProductDetails, etc.)
+│   │   ├── routes/               # Route guards (AdminRoute, PrivateRoute)
+│   │   ├── services/             # API call abstractions
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   └── index.html
+│   ├── .env                     # Frontend env vars (gitignored)
+│   ├── vercel.json              # SPA rewrite for Vercel deployment
+│   ├── package.json
+│   ├── vite.config.js
+│   └── eslint.config.js
+│
+└── README.md
 
 ```
 
----
-
-## ⚙️ Setup Instructions
+## ⚙️ Setup & Run Locally
 
 ### 1. Clone the Repository
-- git clone https://github.com/your-username/ecommerce-app.git
-- cd ecommerce-app/backend
-  
-### 2. Install Dependencies
-- npm install
-  
-### 3. Create .env File
-- Create a .env file in backend/ with the following:
-
 ```
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-CLOUDINARY_NAME=your_cloudinary_name
-CLOUDINARY_API_KEY=your_key
-CLOUDINARY_API_SECRET=your_secret
+ git clone https://github.com/your-username/ecommerce-app.git
+ ```
+ 
+### 2. Backend
 ```
-### 4. Start Backend Server
-- npm run dev
+ cd backend
+ npm install
+ npm run dev
+```
+- **Create .env with PORT, MONGO_URI, JWT_SECRET, CLOUDINARY creds**
+
   
-## 🔍 API Testing
+### 3. Frontend
+```
+ cd frontend
+ npm install
+ npm run dev
+  ```
+- **Create .env with any frontend configs if needed**
+  
+## 📡 API Endpoints (via backend server)
 
-### Use Postman to test:
+- POST /api/auth/register — Register new user
+- POST /api/auth/login — Authenticate user
+- GET /api/auth/profile — Get user profile
+- GET /api/products — List all products
+- GET /api/products/:id — Get product details using product ID
+- POST /api/products — Create product (Admin + image upload)
+- POST /api/orders — Place new order
+- GET /api/orders — Get orders
+- **Protected routes require Bearer JWT token**
 
-- POST /api/auth/register – Register user
-
-- POST /api/auth/login – Login user
-
-- GET /api/products/ – Get all products
-
-- POST /api/products/ – Add product (admin)
-
-- POST /api/orders/ – Place order
-
-- Authenticated routes require JWT token in headers.
-
-## 📷 Screenshots / Demo
-- (Frontend in progress. Add here once UI is ready.)
-
-## 🚀 Deployment
--  (Coming Soon)
 
 ## 🤝 Contributing
 - Contributions are welcome! Feel free to fork and submit PRs.
