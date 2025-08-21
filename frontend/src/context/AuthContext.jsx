@@ -95,8 +95,7 @@ const initialState = {
   const login = async (credentials) => {
     try {
       dispatch({ type: 'LOGIN_START' });
-      const response = await authAPI.login(credentials);
-      
+      const response = await authAPI.login(credentials); // calling authAPI
       dispatch({
         type: 'LOGIN_SUCCESS',
         payload: {
@@ -104,14 +103,13 @@ const initialState = {
           token: response.data.token
         }
       });
-      
-      toast.success('Login successful!');
-      return { success: true };
+      return response.data
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Login failed';
-      dispatch({ type: 'LOGIN_FAILURE', payload: errorMessage });
-      toast.error(errorMessage);
-      return { success: false, error: errorMessage };
+      dispatch({
+        type: 'LOGIN_FAILURE',
+        payload: error.response?.data?.message || 'Login failed', 
+      });
+      throw error.response?.data || { message: 'Login failed' };
     }
   };
 

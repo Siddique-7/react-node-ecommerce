@@ -13,11 +13,16 @@ import {
 } from "react-icons/fi";
 import { toast } from "react-toastify";
 
+
+import useAuth from '../context/AuthContext.jsx'; 
 import productsAPI from "../services/productsAPI";
 import Loader from "../components/Loader";
 import useCart from "../context/CartContext";
 
+
+
 const ProductDetails = () => {
+  const { isAuthenticated } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -46,6 +51,12 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = () => {
+
+    if (!isAuthenticated) {
+    toast.info("Please login to add items to cart");
+    navigate("/login");
+    return;
+  }
     if (product.countInStock > 0) {
       for (let i = 0; i < quantity; i++) {
         addToCart(product);

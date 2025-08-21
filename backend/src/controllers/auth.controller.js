@@ -24,14 +24,42 @@ export const registerUser = async (req, res) => {
 // Login
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (!user || !(await user.matchPassword(password))) {
-    return res.status(401).json({ message: "Invalid credentials" });
-  }
-  res.json({
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    token: generateToken(user._id)
-  });
-};
+
+  try{
+      const user = await User.findOne({email})
+
+      
+    // 1. If no user found → redirect to register
+      if(!user){
+        return res.status(404).json({
+         code: "USER_NOT_FOUND",
+        message: "No account found. Please register first."
+        })
+      }
+      
+    // 2. If password doesn’t match
+      const isMatch = await user.matchPassword(password)
+      if(!isMatch){
+        return res.status(401).json({
+          code: "INVALID_PASSWORD",
+          message: "Invalid password"
+       })
+      }
+
+      // 3. Successful login
+      return res.json({
+        code: "LOGIN_SUCCESS",
+        success: true,
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token: generateToken(user._id)
+      })
+    } catch(error){
+        console.error("Login error:", error);
+        res.status(500).json({
+        code: "SERVER_ERROR",
+        message: "Something went wrong. Please try again later."
+       }) }
+}
+

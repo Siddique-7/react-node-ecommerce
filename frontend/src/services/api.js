@@ -23,14 +23,16 @@ api.interceptors.request.use(
 
 // Response interceptor to handle errors
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) =>  response,
   (error) => {
+    const originalRequest = error.config;
+
     if (error.response?.status === 401) {
-      // Unauthorized - clear token and redirect to login
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+      // Don't redirect for login/register endpoints
+      if (!originalRequest.url.includes('/auth/login') && !originalRequest.url.includes('/auth/register')) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }
     } else if (error.response?.status === 500) {
       toast.error('Server error. Please try again later.');
     } else if (error.code === 'ECONNABORTED') {

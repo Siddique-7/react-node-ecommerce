@@ -1,13 +1,23 @@
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { FiShoppingCart } from 'react-icons/fi';
+import { FiShoppingCart, FiCheck, FiX  } from 'react-icons/fi';
+
+
+import useAuth from '../context/AuthContext.jsx'; 
 import useCart from '../context/CartContext.jsx';
 
 const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const { addToCart, isInCart } = useCart();
 
-  const handleAddToCart = (e) => {
-    e.preventDefault();
+  const handleAddToCart = (product) => {
+     if (!isAuthenticated) {
+      toast.info("Please login to add products to your cart");
+      navigate("/login");
+      return;
+    }
+
     if (product.countInStock > 0) {
       addToCart(product);
     } else {
@@ -63,14 +73,14 @@ const ProductCard = ({ product }) => {
 {/* Add to Cart Button */}
 <div className="p-4 pt-0">
   <button
-    onClick={handleAddToCart}
+    onClick={() => handleAddToCart(product)}
     disabled={product.countInStock === 0 || isInCart(product._id)}
     aria-label={
       product.countInStock === 0 
         ? 'Product out of stock' 
         : isInCart(product._id) 
           ? 'Product already in cart' 
-          : `Add ${product.name} to cart`
+          : `Add ${product.title} to cart`
     }
     className={`
       w-full flex items-center justify-center gap-2 py-3 px-4 
@@ -121,6 +131,7 @@ const ProductCard = ({ product }) => {
     </p>
   )}
 </div>
+
     </div>
   );
 };

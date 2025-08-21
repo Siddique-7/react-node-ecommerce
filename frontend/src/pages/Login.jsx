@@ -54,20 +54,24 @@ const Login = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    try {
-      const result = await login(formData);
+try {
+      const data = await login(formData); // axios returns response in result
 
- if (result?.success) {
-  // toast.success("Login successful");
-  navigate(from || "/", { replace: true });
-} else {
-        toast.error(result.message || "Invalid email or password");
-      }
+      if (data.code === "LOGIN_SUCCESS") {
+      navigate(from || "/", { replace: true });
+ } 
     } catch (err) {
-      console.error(err);
-      toast.error("Something went wrong. Please try again later.");
+    // err is the object I threw from AuthContext
+
+     if (err.code === "USER_NOT_FOUND") {
+      toast.error(err.message);
+    } else if (err.code === "INVALID_PASSWORD") {
+      toast.error(err.message);
+    } else {
+      toast.error(err.message || "Unexpected error, please try again.");
     }
-  };
+    }
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-700 via-purple-800 to-pink-800 text-white px-4 sm:px-6 py-12">
@@ -162,7 +166,7 @@ const Login = () => {
           </div>
 
           <p className="text-sm text-center">
-            Don’t have an account?{' '}
+            Don't have an account?{' '}
             <Link to="/register" className="text-blue-300 hover:text-blue-500 underline">
               Register here
             </Link>

@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { FiArrowRight, FiUserPlus, FiShoppingBag,FiHeadphones, FiStar} from "react-icons/fi";
-import { toast } from "react-toastify";
+import { FiArrowRight, FiUserPlus, FiShoppingBag, FiStar} from "react-icons/fi";
 
 
 import  productsAPI  from "../services/productsAPI.js";
 import ProductCard from "../components/ProductCard";
-import Loader from "../components/Loader";
 import Hero from "../components/Hero.jsx";
 
 const Home = () => {
@@ -33,19 +31,13 @@ const Home = () => {
       // FIXED: Handle different response formats
     } catch (error) {
       console.error("Error fetching products:", error);
-      toast.error("Failed to load products");
+      // toast.error("Failed to load products");
       // FIXED: Don't let error prevent page from rendering
       setProducts([]); // Set empty array instead of leaving undefined
     } finally {
       setLoading(false);
     }
   };
-
-  // FIXED: Show loader only for initial loading
-  if (loading) {
-    return <Loader fullScreen />;
-  }
-
 
   return (
     <div className="min-h-screen">
@@ -75,7 +67,13 @@ const Home = () => {
           </div>
 
           {/*  FIXED: Handle both cases - with products and without */}
-          {products.length > 0 ? (
+
+
+ {loading ? (
+      <div className="flex justify-center py-12">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    ) : products.length > 0 ? (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {products.map((product) => (

@@ -102,7 +102,7 @@ const Navbar = () => {
                     >
                       <FiSettings className="mr-3" size={16} />
                       Profile
-                    </Link>
+                    </Link>                  
                     {user?.role === 'admin' && (
                       <Link
                         to="/admin"
@@ -113,6 +113,7 @@ const Navbar = () => {
                         Admin Dashboard
                       </Link>
                     )}
+                    
                     <hr className="my-1" />
                     <button
                       onClick={handleLogout}
