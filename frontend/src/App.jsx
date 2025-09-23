@@ -1,5 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 
+import { useEffect } from 'react';
+import { startKeepAlive } from './utils/keepAlive';
+
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import PrivateRoute from './routes/PrivateRoute';
@@ -18,6 +21,11 @@ import Orders from './pages/Orders';
 import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
+
+  useEffect(() => {
+    startKeepAlive(import.meta.env.VITE_API_BASE_URL);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
