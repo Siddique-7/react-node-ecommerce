@@ -39,6 +39,14 @@ const Home = () => {
     }
   };
 
+   if(loading) {
+    return (
+      <div className="flex justify-center py-12">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    )
+   }
+
   return (
     <div className="min-h-screen">
       
@@ -68,12 +76,7 @@ const Home = () => {
 
           {/*  FIXED: Handle both cases - with products and without */}
 
-
- {loading ? (
-      <div className="flex justify-center py-12">
-        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    ) : products.length > 0 ? (
+     { products.length > 0 ? (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {products.map((product) => (
@@ -95,7 +98,7 @@ const Home = () => {
           ) : (
             <div className="text-center py-12">
               <p className=" text-lg mb-4">
-                No products available at the moment
+               No products available at the moment.
               </p>
               </div>
           )}
