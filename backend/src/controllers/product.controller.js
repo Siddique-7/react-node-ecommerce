@@ -1,4 +1,3 @@
-// controllers/product.controller.js
 import Product from '../models/product.model.js';
 import cloudinary from '../config/cloudinary.js';
 
@@ -49,7 +48,30 @@ export const createProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const { search, category, min, max, sort, page = 1, limit = 10 } = req.query;
+
+    let filters = [];
+
+    if (search) filters.push({ title: { $regex: search, $options: "i" } });
+    if (category) filters.push({ category: { $regex: `^${category}$`, $options: "i" } });
+    if (min || max) {
+      let priceFilter = {};
+      if (min) priceFilter.$gte = Number(min);
+      if (max) priceFilter.$lte = Number(max);
+      filters.push({ price: priceFilter });
+    }
+
+    const query = filters.length ? { $and: filters } : {};
+
+    let productsQuery = Product.find(query);
+
+    if (sort === "price_asc") productsQuery = productsQuery.sort({ price: 1 });
+    if (sort === "price_desc") productsQuery = productsQuery.sort({ price: -1 });
+    if (sort === "newest") productsQuery = productsQuery.sort({ createdAt: -1 });
+
+    const skip = (page - 1) * limit;
+    const products = await productsQuery.skip(skip).limit(Number(limit));
+
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch products", error: error.message });
