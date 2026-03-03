@@ -122,14 +122,14 @@ const ProductCard = ({ product }) => {
   </button>
   
   {/* Optional: Stock status below button */}
-  {product.countInStock > 0 && product.countInStock <= 10 && (
+  {/* {product.countInStock > 0 && product.countInStock <= 10 && (
     <p className="text-center text-sm text-gray-600 mt-2">
       {product.countInStock <= 5 
         ? `Hurry! Only ${product.countInStock} items left` 
         : `${product.countInStock} items available`
       }
     </p>
-  )}
+  )} */}
 </div>
 
     </div>

@@ -23,7 +23,7 @@ const Home = () => {
 
       const response = await productsAPI.getAllProducts({
         sort: "-createdAt",
-        limit: 12,
+        limit: 8,
       });
 
       console.log("Products Response:", response.data);

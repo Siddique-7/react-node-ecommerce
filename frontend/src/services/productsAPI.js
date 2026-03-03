@@ -1,17 +1,15 @@
 import api from './api';
 
 const productsAPI = {
-  // Get all products (with optional filters like sort, limit, etc.)
+  
   getAllProducts: (params = {}) => {
-    return api.get('/products', { params });  // maps to GET /api/products
+    return api.get('/products', { params });  
   },
 
-  // Get single product by ID (e.g., /api/products/123)
   getProductById: (id) => {
-    return api.get(`/products/${id}`);  // maps to GET /api/products/:id
+    return api.get(`/products/${id}`);  
   },
 
-  // Create (Post) new product (e.g., POST /api/products)
   createProduct: (productData) => {
     return api.post('/products', productData, {
       headers: {
