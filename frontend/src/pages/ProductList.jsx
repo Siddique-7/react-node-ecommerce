@@ -5,32 +5,44 @@ import productsAPI from '../services/productsAPI';
 const ProductListPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
 
     const fetchProducts = (params) => {
     setLoading(true);
-    productsAPI.getAllProducts(params)
-      .then((res) => setProducts(res.data || []))
+    productsAPI.getAllProducts({ ...params, page })
+      .then((res) => {
+        const data = res.data;
+        setProducts(data.products || [])
+        setPage(data.page || 1)
+        setPages(data.pages || 1)
+      })
       .catch((err) => console.error("Error fetching products:", err))
       .finally(() => setLoading(false));
   };
 
- // 1️⃣ Debounced Search
+ // Debounced Search
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      fetchProducts({ search, category, sort });
+      setPage(1)
+      fetchProducts({ search, category, sort, page: 1 });
     }, 400);
-
     return () => clearTimeout(delayDebounce);
+  }, [search]);
 
-  }, [search]); // only debounce search
-
-  // 2️⃣ Immediate update on category or sort change
+  // Immediate update on category or sort change
   useEffect(() => {
-    fetchProducts({ search, category, sort });
+    setPage(1);
+    fetchProducts({ search, category, sort, page: 1 });
   }, [category, sort]);
+
+  // Immediate update on page change
+  useEffect(() => {
+  fetchProducts({ search, category, sort, page });
+}, [page]);
 
 
 return (
@@ -89,9 +101,33 @@ return (
           </p>
         )}
       </div>
-    </div>
-  );
+     
+      {/* Pagination */}
+ {pages > 1 && (
+  <div className="flex justify-center mt-6 gap-2">
+    <button
+      disabled={page === 1}
+      onClick={() => setPage(page - 1)}
+      className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+    >
+      Previous
+    </button>
 
-};
+    <span className="px-4 py-2 text-white">
+      Page {page} of {pages}
+    </span>
+
+    <button
+      disabled={page === pages}
+      onClick={() => setPage(page + 1)}
+      className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+    >
+      Next
+    </button>
+  </div>    
+ )}  
+    
+  </div>
+)}
 
 export default ProductListPage;
