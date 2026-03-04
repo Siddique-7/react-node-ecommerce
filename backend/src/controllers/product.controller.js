@@ -50,6 +50,10 @@ export const getProducts = async (req, res) => {
   try {
     const { search, category, min, max, sort, page = 1, limit = 10 } = req.query;
 
+    const pageNumber = Number(page) || 1;
+    const limitNumber = Number(limit) || 10;
+    const skip = (pageNumber - 1) * limitNumber;
+
     let filters = [];
 
     if (search) filters.push({ title: { $regex: search, $options: "i" } });
@@ -69,10 +73,15 @@ export const getProducts = async (req, res) => {
     if (sort === "price_desc") productsQuery = productsQuery.sort({ price: -1 });
     if (sort === "newest") productsQuery = productsQuery.sort({ createdAt: -1 });
 
-    const skip = (page - 1) * limit;
-    const products = await productsQuery.skip(skip).limit(Number(limit));
+    const total = await Product.countDocuments(query);
+    const products = await productsQuery.skip(skip).limit(limitNumber);
 
-    res.json(products);
+    res.json({
+      products,
+      page: pageNumber,
+      pages: Math.ceil(total / limitNumber),
+      total,
+    });
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch products", error: error.message });
   }
