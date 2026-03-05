@@ -18,6 +18,7 @@ import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
+import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
@@ -51,6 +52,11 @@ function App() {
           <Route path="/orders" element={
             <PrivateRoute>
               <Orders />
+            </PrivateRoute>
+          } />
+          <Route path="/profile" element={
+            <PrivateRoute>
+              <Profile />
             </PrivateRoute>
           } />
           

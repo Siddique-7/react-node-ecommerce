@@ -63,3 +63,112 @@ export const loginUser = async (req, res) => {
        }) }
 }
 
+// Get Profile
+export const getProfile = async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        role: req.user.role,
+        phone: req.user.phone,
+        address: req.user.address,
+        createdAt: req.user.createdAt
+      }
+    });
+  } catch (error) {
+    console.log("❌ Profile fetch error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+  }
+};
+
+// Update Profile
+export const updateProfile = async (req, res) => {
+  try {
+    const user = req.user; // from protect middleware
+
+    const { name, phone, address } = req.body;
+
+    if (name) user.name = name;
+    if (phone !== undefined) user.phone = phone;
+
+    if (address) {
+      user.address = {
+        street: address.street || user.address?.street,
+        city: address.city || user.address?.city,
+        state: address.state || user.address?.state,
+        postalCode: address.postalCode || user.address?.postalCode,
+        country: address.country || user.address?.country,
+      };
+    }
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: {
+        id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        address: updatedUser.address,
+        role: updatedUser.role,
+      }
+    });
+
+  } catch (error) {
+    console.error("Profile update error:", error.message);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// Update Password
+export const changePassword = async (req, res) => {
+  try {
+    const user = req.user;
+
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Both current and new password are required"
+      });
+    }
+
+    if (currentPassword === newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "New password must be different from current password"
+      });
+    }  
+
+    const isMatch = await user.matchPassword(currentPassword);
+
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Current password is incorrect"
+      });
+    }
+
+    user.password = newPassword; // assuming you hash in pre-save middleware
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password updated successfully"
+    });
+
+  } catch (error) {
+    console.error("Password change error:", error.message);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};

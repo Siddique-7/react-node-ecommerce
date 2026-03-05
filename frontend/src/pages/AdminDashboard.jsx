@@ -15,7 +15,6 @@ import { toast } from "react-toastify";
 
 import productsAPI from "../services/productsAPI";
 import ordersAPI from "../services/ordersAPI";
-import usersAPI from "../services/usersAPI";
 import Loader from "../components/Loader";
 
 const AdminDashboard = () => {

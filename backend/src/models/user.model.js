@@ -1,12 +1,52 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ["user", "admin"], default: "user" },
-}, { timestamps: true });
+const addressSchema = new mongoose.Schema({
+  street: { type: String },
+  city: { type: String },
+  state: { type: String },
+  postalCode: { type: String },
+  country: { type: String }
+}, { _id: false });
+
+const userSchema = new mongoose.Schema(
+  {
+    name: { 
+      type: String, 
+      required: true,
+      trim: true
+    },
+
+    email: { 
+      type: String, 
+      required: true, 
+      unique: true,
+      lowercase: true,
+      trim: true
+    },
+
+    password: { 
+      type: String, 
+      required: true 
+    },
+
+    role: { 
+      type: String, 
+      enum: ["user", "admin"], 
+      default: "user" 
+    },
+
+    phone: {
+      type: String,
+      trim: true,
+      match: /^[0-9]{10}$/,
+    },
+
+    address: addressSchema
+
+  },
+  { timestamps: true }
+);
 
 // Encrypt password before saving
 userSchema.pre("save", async function (next) {
