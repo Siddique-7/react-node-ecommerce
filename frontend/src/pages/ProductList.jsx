@@ -66,9 +66,15 @@ return (
           onChange={(e) => setCategory(e.target.value)}
         >
           <option value="">All Categories</option>
-          <option value="electronics">Electronics</option>
+          <option value="TV">TV</option>
+          <option value="Phones">Phones</option>
+          <option value="Laptops">Laptops</option>
+          <option value="Tablets">Tablets</option>
+          <option value="Headphones">Headphones</option>
           <option value="Clothing">Clothing</option>
-          <option value="Accessories">Accessories</option>
+          <option value="Sports">Sports</option>
+          <option value="Gaming">Gaming</option>
+          <option value="Smartwatch">Smartwatch</option>
         </select>
 
         {/* Sort */}

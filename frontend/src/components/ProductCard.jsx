@@ -1,5 +1,6 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import { FiShoppingCart, FiCheck, FiX  } from 'react-icons/fi';
 
 
@@ -23,7 +24,7 @@ const ProductCard = ({ product }) => {
     } else {
       toast.error('Product is out of stock');
     }
-  };
+  }
 
   return (
     <div className="bg-slate-300 text-black rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden group border">
@@ -113,23 +114,8 @@ const ProductCard = ({ product }) => {
       }
     </span>
     
-    {/* Stock indicator for low stock */}
-    {/* {product.countInStock > 0 && product.countInStock <= 5 && !isInCart(product._id) && (
-      <span className="ml-1 text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
-        Only {product.countInStock} left
-      </span>
-    )} */}
   </button>
   
-  {/* Optional: Stock status below button */}
-  {/* {product.countInStock > 0 && product.countInStock <= 10 && (
-    <p className="text-center text-sm text-gray-600 mt-2">
-      {product.countInStock <= 5 
-        ? `Hurry! Only ${product.countInStock} items left` 
-        : `${product.countInStock} items available`
-      }
-    </p>
-  )} */}
 </div>
 
     </div>

@@ -86,7 +86,7 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product) => {
     dispatch({ type: 'ADD_TO_CART', payload: product });
-    toast.success(`${product.name} added to cart!`);
+    toast.success(`${product.title} added to cart!`);
   };
 
   const removeFromCart = (productId) => {

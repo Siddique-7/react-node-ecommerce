@@ -472,8 +472,8 @@ const Checkout = () => {
                 {items.map((item) => (
                   <div key={item._id} className="flex items-center space-x-3">
                     <img
-                      src={item.images?.[0] || "/placeholder-image.jpg"}
-                      alt={item.name}
+                      src={item.image || '/placeholder-image.jpg'}
+                      alt={item.title}
                       className="w-12 h-12 object-cover rounded"
                     />
                     <div className="flex-1 min-w-0">

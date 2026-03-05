@@ -13,8 +13,8 @@ import  {CartProvider}  from './context/CartContext.jsx'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <CartProvider>
+      <CartProvider>
+        <AuthProvider>
           <App />
           <ToastContainer
             position="top-right"
@@ -28,8 +28,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             pauseOnHover
             theme="light"
           />
-        </CartProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </CartProvider>
     </BrowserRouter>
   </React.StrictMode>,
 )

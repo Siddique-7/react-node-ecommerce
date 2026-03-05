@@ -1,6 +1,7 @@
 import { createContext, useContext, useReducer, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
+import useCart from '../context/CartContext';
 
 import  authAPI  from '../services/authAPI';
 
@@ -24,7 +25,12 @@ const authReducer = (state, action) => {
       };
 
     case 'LOGIN_FAILURE':
-      return { ...state, loading: false, error: action.payload, isAuthenticated: false };
+      return { 
+        ...state, 
+        loading: false, 
+        error: action.payload, 
+        isAuthenticated: false };
+
     case 'LOGOUT':
       localStorage.removeItem('token');
       return {
@@ -35,6 +41,7 @@ const authReducer = (state, action) => {
         loading: false,
         error: null
       };
+
     case 'LOAD_USER':
       return {
         ...state,
@@ -46,8 +53,10 @@ const authReducer = (state, action) => {
 
     case 'CLEAR_ERROR':
       return { ...state, error: null };
+
     case 'SET_LOADING':
       return { ...state, loading: action.payload };
+
     default:
       return state;
   }
@@ -63,8 +72,9 @@ const initialState = {
   error: null
 };
 
- export const AuthProvider = ({ children }) => {
+  export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const { dispatch: cartDispatch } = useCart();
 
   // Load user on app start if token exists
   useEffect(() => {
@@ -128,6 +138,7 @@ const initialState = {
 
   const logout = () => {
     dispatch({ type: 'LOGOUT' });
+    cartDispatch({ type: 'CLEAR_CART' });
     toast.success('Logged out successfully!');
   };
 

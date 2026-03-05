@@ -69,8 +69,8 @@ const Cart = () => {
                     {/* Product Image */}
                     <div className="flex-shrink-0">
                       <img
-                        src={item.images?.[0] || '/placeholder-image.jpg'}
-                        alt={item.name}
+                        src={item.image || '/placeholder-image.jpg'}
+                        alt={item.title}
                         className="w-20 h-20 object-cover rounded-lg"
                       />
                     </div>
@@ -116,7 +116,7 @@ const Cart = () => {
                     {/* Item Total */}
                     <div className="text-right">
                       <p className="text-lg font-semibold text-gray-900">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        ₹{(item.price * item.quantity).toFixed(2)}
                       </p>
                       <button
                         onClick={() => removeFromCart(item._id)}
@@ -156,7 +156,7 @@ const Cart = () => {
                   Subtotal ({items.reduce((total, item) => total + item.quantity, 0)} items)
                 </span>
                 <span className="font-medium">
-                  ${getCartTotal().toFixed(2)}
+                  ₹{getCartTotal().toFixed(2)}
                 </span>
               </div>
 
@@ -170,7 +170,7 @@ const Cart = () => {
               <div className="flex justify-between">
                 <span className="text-gray-600">Tax</span>
                 <span className="font-medium">
-                  ${(getCartTotal() * 0.08).toFixed(2)}
+                  ₹{(getCartTotal() * 0.08).toFixed(2)}
                 </span>
               </div>
 
@@ -191,14 +191,14 @@ const Cart = () => {
             {getCartTotal() < 50 && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
                 <p className="text-sm text-blue-800">
-                  Add ${(50 - getCartTotal()).toFixed(2)} more to get free shipping!
+                  Add ₹{(50 - getCartTotal()).toFixed(2)} more to get free shipping!
                 </p>
               </div>
             )}
 
             <button
               onClick={handleCheckout}
-              className="w-full btn-primary py-3 text-lg"
+              className="w-full btn-primary py-3 text-lg cursor-pointer"
             >
               {isAuthenticated ? 'Proceed to Checkout' : 'Login to Checkout'}
             </button>
