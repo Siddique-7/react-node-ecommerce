@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   FiShoppingCart,
@@ -7,7 +7,8 @@ import {
   FiX,
   FiLogOut,
   FiSettings,
-  FiPackage
+  FiPackage,
+  FiShield
 } from 'react-icons/fi';
 
 import useAuth from '../context/AuthContext';
@@ -20,6 +21,24 @@ const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const { getCartItemsCount } = useCart();
   const navigate = useNavigate();
+  const userMenuRef = useRef(null);
+
+  useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (
+      userMenuRef.current &&
+      !userMenuRef.current.contains(event.target)
+    ) {
+      setIsUserMenuOpen(false);
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+ }, []);
 
   const handleLogout = () => {
     logout();
@@ -72,7 +91,7 @@ const Navbar = () => {
 
             {/* User Menu */}
             {isAuthenticated ? (
-              <div className="relative">
+              <div className="relative" ref={userMenuRef}>
 
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
@@ -97,7 +116,7 @@ const Navbar = () => {
                       className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
-                      <FiSettings className="mr-3" size={16} />
+                      <FiUser className="mr-3" size={16} />
                       Profile
                     </Link>                  
                     {user?.role === 'admin' && (
@@ -106,7 +125,7 @@ const Navbar = () => {
                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
-                        <FiSettings className="mr-3" size={16} />
+                        <FiShield className="mr-3" size={16} />
                         Admin Dashboard
                       </Link>
                     )}

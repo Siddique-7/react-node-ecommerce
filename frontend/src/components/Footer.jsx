@@ -105,18 +105,18 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  to="/shipping" 
+                  to="/return" 
                   className="text-gray-400 hover:text-white transition-colors text-sm"
                 >
-                  Shipping Info
+                  Return
                 </Link>
               </li>
               <li>
                 <Link 
-                  to="/returns" 
+                  to="/Exchange" 
                   className="text-gray-400 hover:text-white transition-colors text-sm"
                 >
-                  Returns & Exchanges
+                  Exchange
                 </Link>
               </li>
             </ul>
@@ -129,7 +129,7 @@ const Footer = () => {
               <div className="flex items-center space-x-3">
                 <FiMapPin className="text-primary-500" size={16} />
                 <span className="text-gray-400 text-sm">
-                  123 Shopping Street, Kanpur, IND
+                  Noida, Uttar Pradesh, India
                 </span>
               </div>
               <div className="flex items-center space-x-3">

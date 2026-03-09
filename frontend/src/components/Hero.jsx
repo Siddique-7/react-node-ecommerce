@@ -28,7 +28,7 @@ const Hero = () => {
   ];
 
   const stats = [
-    { icon: FiUsers, value: "50K+", label: "Happy Customers" },
+    { icon: FiUsers, value: "1K+", label: "Happy Customers" },
     { icon: FiStar, value: "4.9", label: "Average Rating" },
     { icon: FiTruck, value: "24h", label: "Fast & Free Delivery" },
     { icon: FiShield, value: "100%", label: "Secure Shopping" }

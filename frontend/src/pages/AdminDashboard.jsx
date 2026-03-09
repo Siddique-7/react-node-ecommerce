@@ -6,13 +6,12 @@ import {
   FiShoppingCart,
   FiDollarSign,
   FiPlus,
-  FiEdit3,
-  FiTrash2,
   FiEye,
   FiUpload,
 } from "react-icons/fi";
 import { toast } from "react-toastify";
 
+import authAPI from "../services/authAPI";
 import productsAPI from "../services/productsAPI";
 import ordersAPI from "../services/ordersAPI";
 import Loader from "../components/Loader";
@@ -24,6 +23,7 @@ const AdminDashboard = () => {
     totalOrders: 0,
     totalRevenue: 0,
   });
+
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
@@ -31,53 +31,66 @@ const AdminDashboard = () => {
     fetchDashboardStats();
   }, []);
 
-  const fetchDashboardStats = async () => {
-    try {
-      setLoading(true);
+const fetchDashboardStats = async () => {
+  try {
+    setLoading(true);
 
-      // Fetch all required data
-      const [productsRes, ordersRes, usersRes] = await Promise.all([
-        productsAPI.getAllProducts(),
-        ordersAPI.getAllOrders(),
-        usersAPI.getAllUsers(),
-      ]);
+    const [productsRes, ordersRes, usersRes] = await Promise.allSettled([
+      productsAPI.getAllProducts(),
+      ordersAPI.getAllOrders(),
+      authAPI.getAllUsers(),
+    ]);
 
-      const products = productsRes.data.products || [];
-      const orders = ordersRes.data.orders || [];
-      const users = usersRes.data.users || [];
+    const products =
+      productsRes.status === "fulfilled"
+        ? productsRes.value.data.products
+        : [];
 
-      const totalRevenue = orders.reduce(
-        (sum, order) => sum + (order.totalAmount || 0),
-        0
-      );
+    const orders =
+      ordersRes.status === "fulfilled"
+        ? ordersRes.value.data.orders
+        : [];
 
-      setStats({
-        totalUsers: users.length,
-        totalProducts: products.length,
-        totalOrders: orders.length,
-        totalRevenue,
-      });
-    } catch (error) {
-      console.error("Error fetching dashboard stats:", error);
-      toast.error("Failed to load dashboard data");
-    } finally {
-      setLoading(false);
-    }
-  };
+    const users =
+      usersRes.status === "fulfilled"
+        ? usersRes.value.data.users
+        : [];
 
-  const StatCard = ({ icon: Icon, title, value, color }) => (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <div className="flex items-center">
-        <div className={`p-3 rounded-lg ${color}`}>
-          <Icon className="text-white" size={24} />
-        </div>
-        <div className="ml-4">
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
+    const totalRevenue = orders.reduce(
+      (sum, order) => sum + (order.totalAmount || 0),
+      0
+    );
+
+    setStats({
+      totalUsers: users.length,
+      totalProducts: products.length,
+      totalOrders: orders.length,
+      totalRevenue,
+    });
+  } catch (error) {
+    console.error("Error fetching dashboard stats:", error);
+    toast.error("Failed to load dashboard data");
+  } finally {
+    setLoading(false);
+  }
+};
+
+  const StatCard = ({ icon: Icon, title, value, color }) => {
+    return (
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="flex items-center">
+          <div className={`p-3 rounded-lg ${color}`}>
+            <Icon className="text-white" size={24} />
+          </div>
+
+          <div className="ml-4">
+            <p className="text-sm font-medium text-gray-600">{title}</p>
+            <p className="text-2xl font-bold text-gray-900">{value}</p>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const sidebarItems = [
     { path: "/admin", label: "Dashboard", icon: FiUsers },

@@ -11,11 +11,19 @@ import AdminRoute from './routes/AdminRoute';
 // Pages
 import Home from './pages/Home';
 import About from './pages/About';
-import Login from './pages/Login';
-import Register from './pages/Register';
 import ProductList from './pages/ProductList';
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
+import Contact from './pages/Contact';
+import Help from './pages/Help';
+import Return from './pages/Return';
+import Exchange from './pages/Exchange';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import CookiePolicy from './pages/CookiePolicy';
+
+import Register from './pages/Register';
+import Login from './pages/Login';
 import Checkout from './pages/Checkout';
 import Payment from './pages/Payment';
 import Orders from './pages/Orders';
@@ -44,6 +52,15 @@ function App() {
           <Route path="/products" element={<ProductList />} />
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/return" element={<Return />} />
+          <Route path="/exchange" element={<Exchange />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/cookies" element={<CookiePolicy />} />
+
+
           
           {/* Protected Routes */}
           <Route path="/checkout" element={

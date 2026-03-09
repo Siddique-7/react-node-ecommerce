@@ -28,8 +28,8 @@ const About = () => {
   ];
 
   const stats = [
-    { number: "10K+", label: "Happy Customers" },
-    { number: "500+", label: "Products" },
+    { number: "1K+", label: "Happy Customers" },
+    { number: "100+", label: "Products" },
     { number: "99.9%", label: "Uptime" },
     { number: "24/7", label: "Support" }
   ];

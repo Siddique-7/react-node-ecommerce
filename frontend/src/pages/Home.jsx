@@ -26,7 +26,6 @@ const Home = () => {
         limit: 8,
       });
 
-      console.log("Products Response:", response.data);
       setProducts(response.data.products || response.data || []); 
       // FIXED: Handle different response formats
     } catch (error) {
@@ -129,7 +128,7 @@ const Home = () => {
         {/* Trust Badge */}
         <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-8">
           <FiStar className="w-4 h-4 text-yellow-400" />
-          <span className="text-sm font-medium">Join 50K+ Happy Customers</span>
+          <span className="text-sm font-medium">Join 1K+ Happy Customers</span>
         </div>
 
         {/* Main Heading - Matching Hero Typography */}
