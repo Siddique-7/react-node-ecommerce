@@ -82,3 +82,25 @@ export const getMyOrders = async (req, res) => {
 
   }
 };
+
+export const getAllOrders = async (req, res) => {
+  try {
+
+    const orders = await Order.find()
+      .sort({ createdAt: -1 })
+      .populate("user", "name email")
+      .populate("orderItems.product", "name price image");
+
+    res.json({
+      success: true,
+      orders
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: "Failed to fetch orders"
+    });
+
+  }
+};

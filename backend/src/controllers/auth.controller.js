@@ -128,7 +128,7 @@ export const updateProfile = async (req, res) => {
   }
 };
 
-// Update Password
+// Change Password
 export const changePassword = async (req, res) => {
   try {
     const user = req.user;
@@ -170,5 +170,26 @@ export const changePassword = async (req, res) => {
   } catch (error) {
     console.error("Password change error:", error.message);
     res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// Get All Users (Admin Only)
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}).select("-password");
+
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      users
+    });
+
+  } catch (error) {
+    console.error("Get all users error:", error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
   }
 };
