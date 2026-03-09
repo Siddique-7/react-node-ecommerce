@@ -37,23 +37,26 @@ const Orders = () => {
   };
 
   const getStatusIcon = (status) => {
-    switch (status.toLowerCase()) {
-      case "pending":
-        return <FiClock className="text-yellow-500" size={20} />;
-      case "confirmed":
-        return <FiCheck className="text-blue-500" size={20} />;
-      case "shipped":
-        return <FiTruck className="text-purple-500" size={20} />;
-      case "delivered":
-        return <FiPackage className="text-green-500" size={20} />;
-      case "cancelled":
-        return <FiX className="text-red-500" size={20} />;
-      default:
-        return <FiClock className="text-gray-500" size={20} />;
-    }
-  };
+  if (!status) status = "pending"; // default fallback
+  switch (status.toLowerCase()) {
+    case "pending":
+      return <FiClock className="text-yellow-500" size={20} />;
+    case "paid":
+      return <FiCheck className="text-blue-500" size={20} />;
+    case "shipped":
+      return <FiTruck className="text-purple-500" size={20} />;
+    case "delivered":
+      return <FiPackage className="text-green-500" size={20} />;
+    case "cancelled":
+      return <FiX className="text-red-500" size={20} />;
+    default:
+      return <FiClock className="text-gray-500" size={20} />;
+  }
+};
 
   const getStatusColor = (status) => {
+    if (!status) status = "pending";
+
     switch (status.toLowerCase()) {
       case "pending":
         return "bg-yellow-100 text-yellow-800";
@@ -135,16 +138,16 @@ const Orders = () => {
                 </div>
 
                 <div className="flex items-center space-x-4 mt-4 sm:mt-0">
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                      order.status
-                    )}`}
-                  >
-                    {order.status.charAt(0).toUpperCase() +
-                      order.status.slice(1)}
-                  </span>
+<span
+  className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+    order.paymentStatus 
+  )}`}
+>
+  {(order.paymentStatus || "Pending").charAt(0).toUpperCase() +
+    (order.paymentStatus || "Pending").slice(1)}
+</span>
                   <span className="text-lg font-bold text-gray-900">
-                    ${order.totalAmount?.toFixed(2)}
+                    ₹{order.totalAmount?.toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -167,7 +170,7 @@ const Orders = () => {
                         {item.product?.name || "Product"}
                       </p>
                       <p className="text-sm text-gray-500">
-                        Qty: {item.quantity} × ${item.price}
+                        Qty: {item.quantity} × ₹{item.price}
                       </p>
                     </div>
                   </div>
@@ -257,7 +260,7 @@ const Orders = () => {
                       <div className="flex justify-between">
                         <span className="text-gray-600">Subtotal:</span>
                         <span>
-                          $
+                          ₹
                           {(
                             order.totalAmount -
                             (order.shippingCost || 0) -
@@ -268,19 +271,19 @@ const Orders = () => {
                       {order.shippingCost > 0 && (
                         <div className="flex justify-between">
                           <span className="text-gray-600">Shipping:</span>
-                          <span>${order.shippingCost.toFixed(2)}</span>
+                          <span>₹{order.shippingCost.toFixed(2)}</span>
                         </div>
                       )}
                       {order.tax > 0 && (
                         <div className="flex justify-between">
                           <span className="text-gray-600">Tax:</span>
-                          <span>${order.tax.toFixed(2)}</span>
+                          <span>₹{order.tax.toFixed(2)}</span>
                         </div>
                       )}
                       <hr className="my-2" />
                       <div className="flex justify-between font-semibold">
                         <span>Total:</span>
-                        <span>${order.totalAmount.toFixed(2)}</span>
+                        <span>₹{order.totalAmount.toFixed(2)}</span>
                       </div>
                     </div>
                   </div>
@@ -292,14 +295,14 @@ const Orders = () => {
                     Items Ordered
                   </h4>
                   <div className="space-y-3">
-                    {order.items?.map((item) => (
+                    {order.orderItems?.map((item) => (
                       <div
                         key={item._id}
                         className="flex items-center space-x-4 p-3 bg-white rounded-lg"
                       >
                         <img
                           src={
-                            item.product?.images?.[0] ||
+                            item.product?.image ||
                             "/placeholder-image.jpg"
                           }
                           alt={item.product?.name || "Product"}
@@ -313,12 +316,12 @@ const Orders = () => {
                             Quantity: {item.quantity}
                           </p>
                           <p className="text-sm font-medium text-gray-900">
-                            ${item.price} each
+                            ₹{item.price} each
                           </p>
                         </div>
                         <div className="text-right">
                           <p className="font-semibold text-gray-900">
-                            ${(item.price * item.quantity).toFixed(2)}
+                            ₹{(item.price * item.quantity).toFixed(2)}
                           </p>
                         </div>
                       </div>

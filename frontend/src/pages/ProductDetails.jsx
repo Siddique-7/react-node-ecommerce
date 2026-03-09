@@ -26,8 +26,7 @@ const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { isInCart } = useCart(); // Assuming isInCart is also available from your CartContext
-
+  const { isInCart } = useCart(); 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
@@ -61,7 +60,6 @@ const ProductDetails = () => {
       for (let i = 0; i < quantity; i++) {
         addToCart(product);
       }
-      toast.success("Added to cart!");
     } else {
       toast.error("Product is out of stock");
     }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   FiShoppingCart,
@@ -63,15 +63,12 @@ const Navbar = () => {
           {/* Desktop Right Actions */}
           <div className="hidden md:flex items-center space-x-6">
             {/* Cart */}
-<button
-  onClick={() => {
-    isAuthenticated ? navigate('/cart') : navigate('/login');
-  }}
-  className="relative p-2 hover:text-primary-600 transition cursor-pointer"
->
-  <FiShoppingCart size={22} />
-</button>
-
+           <Link
+             to= "/cart"
+             className="relative p-2 hover:text-primary-600 transition cursor-pointer"
+           >
+             <FiShoppingCart size={22} />
+           </Link>
 
             {/* User Menu */}
             {isAuthenticated ? (

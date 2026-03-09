@@ -1,24 +1,15 @@
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { FiShoppingCart, FiCheck, FiX  } from 'react-icons/fi';
 
 
-import useAuth from '../context/AuthContext.jsx'; 
 import useCart from '../context/CartContext.jsx';
 
 const ProductCard = ({ product }) => {
-  const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
   const { addToCart, isInCart } = useCart();
 
   const handleAddToCart = (product) => {
-     if (!isAuthenticated) {
-      toast.info("Please login to add products to your cart");
-      navigate("/login");
-      return;
-    }
-
     if (product.countInStock > 0) {
       addToCart(product);
     } else {
@@ -110,7 +101,7 @@ const ProductCard = ({ product }) => {
         ? 'Out of Stock'
         : isInCart(product._id)
           ? 'In Cart'
-          : <span className='cursor-pointer'> Add to Cart </span>
+          :  'Add to Cart'
       }
     </span>
     

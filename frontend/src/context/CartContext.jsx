@@ -47,19 +47,13 @@ const cartReducer = (state, action) => {
         items: []
       };
     
-    case 'LOAD_CART':
-      return {
-        ...state,
-        items: action.payload
-      };
-    
     default:
       return state;
   }
 };
 
 const initialState = {
-  items: [],
+  items: JSON.parse(localStorage.getItem("cart")) || [],
   loading: false
 };
 

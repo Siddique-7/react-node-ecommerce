@@ -17,6 +17,7 @@ import ProductList from './pages/ProductList';
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import Payment from './pages/Payment';
 import Orders from './pages/Orders';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
@@ -28,6 +29,7 @@ function App() {
   }, []);
 
   return (
+    
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar />
       
@@ -49,6 +51,14 @@ function App() {
               <Checkout />
             </PrivateRoute>
           } />
+           <Route
+  path="/payment"
+  element={
+    <PrivateRoute>
+      <Payment />
+    </PrivateRoute>
+  }
+/>
           <Route path="/orders" element={
             <PrivateRoute>
               <Orders />
