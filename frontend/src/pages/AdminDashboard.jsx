@@ -175,7 +175,7 @@ const fetchDashboardStats = async () => {
                     <StatCard
                       icon={FiDollarSign}
                       title="Total Revenue"
-                      value={`$${stats.totalRevenue.toLocaleString()}`}
+                      value={`₹${stats.totalRevenue.toLocaleString()}`}
                       color="bg-orange-500"
                     />
                   </div>

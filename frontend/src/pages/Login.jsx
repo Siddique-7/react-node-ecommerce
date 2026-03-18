@@ -138,10 +138,6 @@ try {
 
           {/* Remember Me + Forgot */}
           <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center space-x-2">
-              <input type="checkbox" className="h-4 w-4 rounded text-primary-600" />
-              <span>Remember me</span>
-            </label>
             <Link to="/forgot-password" className="text-blue-300 hover:text-blue-500 underline">
               Forgot password?
             </Link>

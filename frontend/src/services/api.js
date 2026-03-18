@@ -34,7 +34,7 @@ api.interceptors.response.use(
         window.location.href = '/login';
       }
     } else if (error.response?.status === 500) {
-      toast.error('Server error. Please try again later.');
+      toast.error(res.data.message || "Server error");
     } else if (error.code === 'ECONNABORTED') {
       toast.error('Request timeout. Please check your connection.');
     }

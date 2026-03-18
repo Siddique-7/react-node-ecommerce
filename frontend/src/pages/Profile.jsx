@@ -65,39 +65,48 @@ const Profile = () => {
 
       await loadUser(); // refresh context
       toast.success("Profile updated successfully");
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Update failed");
     } finally {
       setLoading(false);
     }
   };
 
-  const handlePasswordUpdate = async (e) => {
-    e.preventDefault();
+const handlePasswordUpdate = async (e) => {
+  e.preventDefault();
 
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      return toast.error("Passwords do not match");
-    }
+  if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
+    return toast.error("All fields are required");
+  }
 
-    try {
-      setLoading(true);
-      await authAPI.changePassword({
-        currentPassword: passwordData.currentPassword,
-        newPassword: passwordData.newPassword
-      });
+  if (passwordData.newPassword !== passwordData.confirmPassword) {
+    return toast.error("Passwords do not match");
+  }
 
-      toast.success("Password updated successfully");
-      setPasswordData({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: ""
-      });
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Password update failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (passwordData.currentPassword === passwordData.newPassword) {
+    return toast.error("New password must be different from current password");
+  }
+
+  try {
+    setLoading(true);
+
+    const res = await authAPI.changePassword({
+      currentPassword: passwordData.currentPassword,
+      newPassword: passwordData.newPassword
+    });
+
+    toast.success(res.data.message);
+
+    setPasswordData({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: ""
+    });
+
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
 
   if (!user) return null;
 
