@@ -42,7 +42,14 @@ const userSchema = new mongoose.Schema(
       match: /^[0-9]{10}$/,
     },
 
-    address: addressSchema
+    address: addressSchema,
+
+    resetPasswordToken: {
+      type: String,
+    },
+    resetPasswordExpire: {
+      type: Date,
+    },
 
   },
   { timestamps: true }
