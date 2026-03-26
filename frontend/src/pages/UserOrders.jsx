@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import ordersAPI from "../services/ordersAPI";
 import Loader from "../components/Loader";
 
-const Orders = () => {
+const UserOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -349,4 +349,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default UserOrders;

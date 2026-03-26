@@ -28,9 +28,14 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Checkout from './pages/Checkout';
 import Payment from './pages/Payment';
-import Orders from './pages/Orders';
+import UserOrders from './pages/UserOrders';
 import Profile from './pages/Profile';
-import AdminDashboard from './pages/AdminDashboard';
+import AdminLayout from "./pages/admin/AdminLayout";
+import Dashboard from "./pages/admin/Dashboard";
+import Products from "./pages/admin/Products";
+import CreateProduct from "./pages/admin/CreateProduct";
+import AdminOrders from "./pages/admin/AdminOrders";
+import Users from "./pages/admin/Users";
 
 function App() {
 
@@ -82,7 +87,7 @@ function App() {
 />
           <Route path="/orders" element={
             <PrivateRoute>
-              <Orders />
+              <UserOrders />
             </PrivateRoute>
           } />
           <Route path="/profile" element={
@@ -92,11 +97,15 @@ function App() {
           } />
           
           {/* Admin Routes */}
-          <Route path="/admin/*" element={
-            <AdminRoute>
-              <AdminDashboard />
-            </AdminRoute>
-          } />
+<Route element={<AdminRoute />}>
+  <Route path="/admin" element={<AdminLayout />}>
+    <Route index element={<Dashboard />} />
+    <Route path="products" element={<Products />} />
+    <Route path="products/new" element={<CreateProduct />} />
+    <Route path="orders" element={<AdminOrders />} />
+    <Route path="users" element={<Users />} />
+  </Route>
+</Route>
           
           {/* 404 Page */}
           <Route path="*" element={

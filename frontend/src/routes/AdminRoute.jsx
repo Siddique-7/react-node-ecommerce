@@ -1,10 +1,8 @@
-import { Navigate } from 'react-router-dom';
-
-
-import  useAuth  from '../context/AuthContext';
+import { Navigate, Outlet } from 'react-router-dom';
+import useAuth from '../context/AuthContext';
 import Loader from '../components/Loader';
 
-const AdminRoute = ({ children }) => {
+const AdminRoute = () => {
   const { isAuthenticated, user, loading } = useAuth();
 
   if (loading) {
@@ -15,7 +13,7 @@ const AdminRoute = ({ children }) => {
     return <Navigate to="/" replace />;
   }
 
-  return children;
+  return <Outlet />; // ✅ KEY FIX
 };
 
 export default AdminRoute;
