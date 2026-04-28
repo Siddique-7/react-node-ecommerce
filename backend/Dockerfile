@@ -1,4 +1,4 @@
-CMD ["node", "src/index.js"]FROM node:18
+FROM node:18
 
 WORKDIR /app
 
