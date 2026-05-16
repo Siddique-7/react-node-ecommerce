@@ -1,0 +1,46 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build backend image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce-backend:latest ./backend
+
+      - name: Build frontend image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce-frontend:latest ./frontend
+
+      - name: Push backend image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce-backend:latest
+
+      - name: Push frontend image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/ecommerce-frontend:latest
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/your-project-folder
+            docker compose pull
+            docker compose up -d

@@ -7,13 +7,11 @@ import orderRoutes from "./routes/order.routes.js";
 
 const app = express();
 
-app.use(cors(({
- origin: process.env.CLIENT_URL?.split(",") || [
-  "http://localhost:5173"
-],
-  methods: ["GET","POST","PUT","DELETE"],
-  credentials: true
-})));
+app.use(cors({
+  origin: true,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"]
+}));
 
 app.use(express.json());
 
