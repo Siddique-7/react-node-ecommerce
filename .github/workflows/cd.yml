@@ -41,6 +41,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/your-project-folder
-            docker compose pull
-            docker compose up -d
+               cd ~/ecommerce-app
+               docker compose pull
+               docker compose up -d --remove-orphans
+               docker ps
