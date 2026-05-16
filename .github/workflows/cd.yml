@@ -25,6 +25,10 @@ jobs:
       - name: Build backend image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce-backend:latest ./backend
 
+      - name: Create frontend .env
+        run: |
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > ./frontend/.env
+
       - name: Build frontend image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/ecommerce-frontend:latest ./frontend
 
@@ -43,5 +47,5 @@ jobs:
           script: |
                cd ~/ecommerce-app
                docker compose pull
-               docker compose up -d --remove-orphans
+               docker compose up -d --force-recreate --remove-orphans
                docker ps
